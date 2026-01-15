@@ -23,9 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Pages configuration
     const AUTH_PAGES = ['login.html', 'register.html'];
-    // matrix.html and matrix-result.html are now PRIVATE
     const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'dashboard.html', 'products.html'];
 
+    // Normalize path for checks
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
 
@@ -33,7 +33,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!supabase) initSupabase();
         if (!supabase) return null;
         try {
-            // Use getSession for faster check, then getUser for security
             const { data: { session } } = await supabase.auth.getSession();
             return session ? session.user : null;
         } catch (e) {
@@ -44,15 +43,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function checkAccess() {
         const user = await getUser();
 
-        // If on a private page and NO USER -> Go to Login
         if (PRIVATE_PAGES.includes(page) && !user) {
             window.location.href = 'login.html';
             return;
         }
 
-        // If on auth page and HAS USER -> Go to Home
         if (AUTH_PAGES.includes(page) && user) {
-            window.location.href = 'index.html';
+            window.location.href = '/';
             return;
         }
     }
@@ -72,11 +69,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (user) {
-            // Logged In State
-            authBtn.href = 'index.html';
+            // Logged In
+            authBtn.href = '/';
             authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
-            // Ensure Logout button exists
             if (!document.getElementById('headerLogoutBtn')) {
                 const logoutBtn = document.createElement('button');
                 logoutBtn.id = 'headerLogoutBtn';
@@ -87,11 +83,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
         } else {
-            // Logged Out State
+            // Logged Out
             authBtn.href = 'login.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
 
-            // Remove logout if exists
             const existingLogout = document.getElementById('headerLogoutBtn');
             if (existingLogout) existingLogout.remove();
         }
@@ -101,10 +96,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (supabase) {
             await supabase.auth.signOut();
         }
-        window.location.href = 'index.html';
+        window.location.href = '/';
     }
 
-    // Auth Form Bindings
+    // Forms
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -112,12 +107,11 @@ document.addEventListener('DOMContentLoaded', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('authError');
-
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
                 errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
             } else {
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }
         });
     }
@@ -130,33 +124,34 @@ document.addEventListener('DOMContentLoaded', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('authError');
-
             const { data, error } = await supabase.auth.signUp({
                 email, password, options: { data: { full_name: name } }
             });
-
             if (error) {
                 errorDiv.textContent = error.message;
             } else if (data.user && !data.session) {
                 errorDiv.style.color = 'green';
                 errorDiv.textContent = 'Проверьте почту для подтверждения!';
             } else {
-                window.location.href = 'index.html';
+                window.location.href = '/';
             }
         });
     }
 
-    // Initialize
     await checkAccess();
     await updateHeader();
 
-    // Index Page specific: lock non-primary cards for guests
-    if (page === 'index.html' || page === '') {
+    // Fix Logo and "Main" links to point to "/" instead of "index.html"
+    document.querySelectorAll('a[href="index.html"]').forEach(link => {
+        link.href = '/';
+    });
+
+    // Landing Page interaction
+    if (page === 'index.html' || page === '' || path === '/') {
         const user = await getUser();
         const cards = document.querySelectorAll('.hero-card');
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
-                // If guest and the card points to a private page or is explicitly locked
                 if (!user && (card.getAttribute('href') === 'matrix.html' || card.classList.contains('is-locked'))) {
                     e.preventDefault();
                     window.location.href = 'login.html';
