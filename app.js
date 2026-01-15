@@ -1,10 +1,20 @@
-document.addEventListener('DOMContentLoaded', () => {
+// Supabase Configuration
+const SUPABASE_URL = 'https://vunhqcczjkxneltnffbr.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_tjoFdDgs4I3zgrkHOe0FgQ_uKm4ivL3';
+
+// Initialize Supabase client (will be set after SDK loads)
+let supabase = null;
+
+document.addEventListener('DOMContentLoaded', async () => {
     const toggle = document.querySelector('.mobile-toggle');
     const nav = document.querySelector('.main-nav');
 
+    // Wait for Supabase SDK to load
+    if (window.supabase) {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+
     // Auth Logic
-    const AUTH_KEY = 'auth_demo_user';
-    const PUBLIC_PAGES = ['index.html', '']; // Landing page
     const AUTH_PAGES = ['login.html', 'register.html'];
     const PRIVATE_PAGES = ['dashboard.html', 'products.html'];
 
@@ -12,15 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
 
-    function isAuth() {
-        return !!localStorage.getItem(AUTH_KEY);
+    async function getUser() {
+        if (!supabase) return null;
+        const { data: { user } } = await supabase.auth.getUser();
+        return user;
     }
 
-    function checkAccess() {
-        const user = isAuth();
+    async function checkAccess() {
+        const user = await getUser();
 
         if (AUTH_PAGES.includes(page) && user) {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'index.html';
             return;
         }
 
@@ -30,8 +42,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function updateHeader() {
-        const user = isAuth();
+    async function updateHeader() {
+        const user = await getUser();
         const headerActions = document.querySelector('.header-actions');
         if (!headerActions) return;
 
@@ -40,11 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
         existingAuth.forEach(el => el.remove());
 
         if (user) {
-            // Logged In: Show Dashboard Link + Logout
-            const dashBtn = document.createElement('a');
-            dashBtn.href = 'index.html';
-            dashBtn.className = 'action-link auth-btn-dynamic';
-            dashBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
+            // Logged In: Show Home + Logout
+            const homeBtn = document.createElement('a');
+            homeBtn.href = 'index.html';
+            homeBtn.className = 'action-link auth-btn-dynamic';
+            homeBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
             const logoutBtn = document.createElement('button');
             logoutBtn.className = 'icon-btn auth-btn-dynamic';
@@ -52,9 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
             logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
             logoutBtn.onclick = logout;
 
-            // Insert before the mobile toggle
             const toggleBtn = headerActions.querySelector('.mobile-toggle');
-            headerActions.insertBefore(dashBtn, toggleBtn);
+            headerActions.insertBefore(homeBtn, toggleBtn);
             headerActions.insertBefore(logoutBtn, toggleBtn);
         } else {
             // Logged Out: Show Login Link
@@ -68,70 +79,130 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function login(e) {
+    async function login(e) {
         if (e) e.preventDefault();
-        // Check inputs if needed, for mock just succeed
-        const emailInput = document.querySelector('input[type="email"]');
-        const email = emailInput ? emailInput.value : 'user@example.com';
 
-        localStorage.setItem(AUTH_KEY, email);
-        window.location.href = 'index.html'; // Redirect to Home (Active State)
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('authError');
+
+        if (!emailInput || !passwordInput) return;
+
+        const email = emailInput.value;
+        const password = passwordInput.value;
+
+        if (!supabase) {
+            if (errorDiv) errorDiv.textContent = 'Ошибка загрузки. Обновите страницу.';
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: password
+        });
+
+        if (error) {
+            if (errorDiv) {
+                errorDiv.textContent = error.message === 'Invalid login credentials'
+                    ? 'Неверный email или пароль'
+                    : error.message;
+            }
+            return;
+        }
+
+        window.location.href = 'index.html';
     }
 
-    function logout() {
-        localStorage.removeItem(AUTH_KEY);
+    async function register(e) {
+        if (e) e.preventDefault();
+
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const errorDiv = document.getElementById('authError');
+
+        if (!emailInput || !passwordInput) return;
+
+        const email = emailInput.value;
+        const password = passwordInput.value;
+        const name = nameInput ? nameInput.value : '';
+
+        if (!supabase) {
+            if (errorDiv) errorDiv.textContent = 'Ошибка загрузки. Обновите страницу.';
+            return;
+        }
+
+        const { data, error } = await supabase.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+                data: { full_name: name }
+            }
+        });
+
+        if (error) {
+            if (errorDiv) {
+                errorDiv.textContent = error.message;
+            }
+            return;
+        }
+
+        // Check if email confirmation is required
+        if (data.user && !data.session) {
+            if (errorDiv) {
+                errorDiv.style.color = 'green';
+                errorDiv.textContent = 'Проверьте вашу почту для подтверждения!';
+            }
+            return;
+        }
+
+        window.location.href = 'index.html';
+    }
+
+    async function logout() {
+        if (supabase) {
+            await supabase.auth.signOut();
+        }
         window.location.href = 'index.html';
     }
 
     // Initialize
-    checkAccess();
-    updateHeader();
+    await checkAccess();
+    await updateHeader();
 
     // Bind Forms
     const loginForm = document.getElementById('loginForm');
     if (loginForm) loginForm.addEventListener('submit', login);
 
     const registerForm = document.getElementById('registerForm');
-    if (registerForm) registerForm.addEventListener('submit', login);
+    if (registerForm) registerForm.addEventListener('submit', register);
 
     // Active Card Logic (Index Page)
     if (page === 'index.html' || page === '') {
         const cards = document.querySelectorAll('.hero-card');
-        const user = isAuth();
+        const user = await getUser();
 
         cards.forEach(card => {
-            // Set up link behavior
             card.addEventListener('click', (e) => {
                 if (!user) {
                     e.preventDefault();
                     window.location.href = 'login.html';
-                } else {
-                    // Logged in: Allow navigation
-                    // For now, these might trigger a "Coming soon" or go to the href
-                    // If href is "dashboard.html", it works (auth check on dashboard passes)
-                    // But user said "переходить на определенную страницу (создадим позже)"
-                    // So we can leave the default href or set it to #
-
-                    // e.preventDefault(); // Uncomment if we want to stay on page
                 }
             });
 
-            // Optional: Visual cue for locked state
             if (!user) {
-                card.style.cursor = 'pointer'; // Still clickable
-                // card.style.opacity = '0.8'; 
+                card.style.cursor = 'pointer';
             }
         });
     }
 
-    // Existing Mobile Toggle Logic
+    // Mobile Toggle Logic
     if (toggle && nav) {
         toggle.addEventListener('click', () => {
             const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
             toggle.setAttribute('aria-expanded', !isExpanded);
             nav.classList.toggle('active');
 
-            // Simple mobile styles injection for active state if not in CSS
             if (!isExpanded) {
                 nav.style.display = 'block';
                 nav.style.position = 'absolute';
