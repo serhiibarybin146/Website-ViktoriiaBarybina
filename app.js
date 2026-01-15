@@ -177,20 +177,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // PWA
-    // SW NUKE - FORCE UNREGISTER
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function (registrations) {
-            for (let registration of registrations) {
-                registration.unregister();
-                console.log("Service Worker Unregistered");
-            }
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
         });
     }
-
-    // DEBUG BAR
-    const debugBar = document.createElement('div');
-    debugBar.style.cssText = "position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:99999;padding:5px;font-size:12px;text-align:center;";
-    const u = await getUser();
-    debugBar.innerHTML = `DEBUG: Page=${page}, User=${u ? 'LOGGED_IN' : 'GUEST'}, Path=${path}`;
-    document.body.appendChild(debugBar);
 });
