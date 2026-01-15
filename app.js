@@ -1,8 +1,8 @@
 // Supabase Configuration
+// Using the User-provided key
 const SUPABASE_URL = 'https://vunhqcczjkxneltnffbr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_tjoFdDgs4I3zgrkHOe0FgQ_uKm4ivL3';
 
-// Direct Global Initialization
 let supabase = null;
 
 function initSupabase() {
@@ -21,7 +21,7 @@ const forceSignOut = async () => {
     if (supabase) await supabase.auth.signOut();
     localStorage.clear();
     sessionStorage.clear();
-    // Clear all cookies for good measure
+    // Clear cookies
     document.cookie.split(";").forEach((c) => {
         document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
@@ -30,8 +30,77 @@ const forceSignOut = async () => {
 window.forceSignOut = forceSignOut;
 
 document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Init System Immediately
     initSupabase();
 
+    // 2. Attach Listeners IMMEDIATELY (Before Async Checks)
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('authError');
+
+            errorDiv.textContent = 'Вход...';
+
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
+            } else {
+                window.location.href = '/';
+            }
+        });
+    }
+
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            const errorDiv = document.getElementById('authError');
+
+            errorDiv.style.color = '#333';
+            errorDiv.textContent = 'Регистрация...';
+
+            const { data, error } = await supabase.auth.signUp({
+                email, password, options: { data: { full_name: name } }
+            });
+
+            if (error) {
+                errorDiv.style.color = '#dc3545';
+                errorDiv.textContent = error.message;
+            } else if (data.user && !data.session) {
+                errorDiv.style.color = 'green';
+                errorDiv.textContent = 'Успешно! Проверьте почту для подтверждения.';
+                // Optional: Clear form
+                registerForm.reset();
+            } else {
+                window.location.href = '/';
+            }
+        });
+    }
+
+    const toggle = document.querySelector('.mobile-toggle');
+    const nav = document.querySelector('.main-nav');
+    if (toggle && nav) {
+        toggle.addEventListener('click', () => {
+            const active = nav.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', active);
+            nav.style.display = active ? 'block' : '';
+        });
+    }
+
+    // PWA Support
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        });
+    }
+
+    // 3. NOW Run Secure Checks (Async)
     const AUTH_PAGES = ['login.html', 'register.html', 'login', 'register'];
     const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'matrix', 'matrix-result'];
 
@@ -40,7 +109,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const pageName = page.replace('.html', '').toLowerCase();
 
     async function getUser() {
-        initSupabase();
         if (!supabase) return null;
         try {
             const { data: { session } } = await supabase.auth.getSession();
@@ -50,30 +118,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    async function checkAccess() {
-        const user = await getUser();
-        const isPrivate = PRIVATE_PAGES.some(p => page.includes(p) || pageName === p);
-        const isAuth = AUTH_PAGES.some(p => page.includes(p) || pageName === p);
-
-        if (isPrivate && !user) {
-            window.location.replace('login.html');
-            return false;
-        }
-
-        if (isAuth && user) {
-            window.location.replace('/');
-            return false;
-        }
-        return true;
-    }
-
     async function updateHeader() {
         const user = await getUser();
         const headerActions = document.querySelector('.header-actions');
-        const navList = document.querySelector('.nav-list');
         let authBtn = document.getElementById('headerAuthBtn');
 
-        // 1. Update main action button
+        // Update Header Button
         if (authBtn) {
             if (user) {
                 authBtn.href = '/';
@@ -84,38 +134,37 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
         }
 
-        // 2. Add/Remove logout icons and links
+        // Toggle Logout Link (Hardcoded ID)
         if (user) {
-            // Header icon
-            if (!document.getElementById('headerLogoutBtn') && headerActions) {
-                const logoutBtn = document.createElement('button');
-                logoutBtn.id = 'headerLogoutBtn';
-                logoutBtn.className = 'icon-btn auth-btn-dynamic';
-                logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
-                logoutBtn.onclick = forceSignOut;
-                headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
-            }
-            // Nav list link
             if (document.getElementById('navLogoutLink')) {
                 document.getElementById('navLogoutLink').style.display = 'block';
             }
         } else {
-            const existingBtn = document.getElementById('headerLogoutBtn');
-            if (existingBtn) existingBtn.remove();
-
             if (document.getElementById('navLogoutLink')) {
                 document.getElementById('navLogoutLink').style.display = 'none';
             }
         }
     }
 
-    // Run Security Check ASAP
-    const isAllowed = await checkAccess();
-    if (!isAllowed) return; // Stop if redirecting
+    // Execute Access Check
+    await (async function checkAccess() {
+        const user = await getUser();
+        const isPrivate = PRIVATE_PAGES.some(p => page.includes(p) || pageName === p);
+        const isAuth = AUTH_PAGES.some(p => page.includes(p) || pageName === p);
 
-    updateHeader();
+        if (isPrivate && !user) {
+            window.location.replace('login.html');
+            return;
+        }
+        if (isAuth && user) {
+            window.location.replace('/');
+            return;
+        }
+        // Only update header if we stay
+        updateHeader();
+    })();
 
-    // Index Page specific logic
+    // Index Page Cards
     if (pageName === 'index' || page === 'index.html' || path === '/' || page === '') {
         const user = await getUser();
         const cards = document.querySelectorAll('.hero-card');
@@ -135,76 +184,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             card.addEventListener('click', (e) => {
-                if (!user) {
-                    if (isMatrix) {
-                        e.preventDefault();
-                        window.location.href = 'login.html';
-                    } else {
-                        // Let modal handle it or prevent if matrix
-                        if (isMatrix) e.preventDefault();
-                    }
+                // If not logged in and it's matrix -> Login
+                if (!user && isMatrix) {
+                    e.preventDefault();
+                    window.location.href = 'login.html';
                 }
+                // If not logged in and NOT matrix -> Let modal handle it (blocked by other script usually)
             });
         });
     }
 
-    // Auth Forms
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('authError');
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) {
-                errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
-            } else {
-                window.location.href = '/';
-            }
-        });
-    }
-
-
-
-
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
-            const errorDiv = document.getElementById('authError');
-            const { data, error } = await supabase.auth.signUp({
-                email, password, options: { data: { full_name: name } }
-            });
-            if (error) {
-                errorDiv.textContent = error.message;
-            } else if (data.user && !data.session) {
-                errorDiv.style.color = 'green';
-                errorDiv.textContent = 'Проверьте почту для подтверждения!';
-            } else {
-                window.location.href = '/';
-            }
-        });
-    }
-
-    // Mobile menu toggle
-    const toggle = document.querySelector('.mobile-toggle');
-    const nav = document.querySelector('.main-nav');
-    if (toggle && nav) {
-        toggle.addEventListener('click', () => {
-            const active = nav.classList.toggle('active');
-            toggle.setAttribute('aria-expanded', active);
-            nav.style.display = active ? 'block' : '';
-        });
-    }
-
-    // PWA
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(() => { });
-        });
-    }
 });
