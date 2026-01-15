@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const dashBtn = document.createElement('a');
             dashBtn.href = 'index.html';
             dashBtn.className = 'action-link auth-btn-dynamic';
-            dashBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Dashboard';
+            dashBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
             const logoutBtn = document.createElement('button');
             logoutBtn.className = 'icon-btn auth-btn-dynamic';
-            logoutBtn.setAttribute('aria-label', 'Log Out');
+            logoutBtn.setAttribute('aria-label', 'Выйти');
             logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
             logoutBtn.onclick = logout;
 
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const loginBtn = document.createElement('a');
             loginBtn.href = 'login.html';
             loginBtn.className = 'action-link auth-btn-dynamic';
-            loginBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Log In';
+            loginBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
 
             const toggleBtn = headerActions.querySelector('.mobile-toggle');
             headerActions.insertBefore(loginBtn, toggleBtn);
