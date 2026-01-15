@@ -43,15 +43,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function checkAccess() {
         const user = await getUser();
 
+        // If on a private page and NO USER -> Go to Login
         if (PRIVATE_PAGES.includes(page) && !user) {
             window.location.href = 'login.html';
             return;
         }
 
+        // If on auth page and HAS USER -> Go to Home
         if (AUTH_PAGES.includes(page) && user) {
             window.location.href = '/';
             return;
         }
+
+        // Reveal the body if everything is fine (for pages that use visibility:hidden for anti-flicker)
+        document.body.style.visibility = 'visible';
     }
 
     async function updateHeader() {
@@ -120,9 +125,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
             const errorDiv = document.getElementById('authError');
             const { data, error } = await supabase.auth.signUp({
                 email, password, options: { data: { full_name: name } }
@@ -138,15 +143,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    await checkAccess();
-    await updateHeader();
-
-    // Fix Logo and "Main" links to point to "/" instead of "index.html"
-    document.querySelectorAll('a[href="index.html"]').forEach(link => {
-        link.href = '/';
-    });
-
-    // Landing Page interaction
+    // Index Page specific
     if (page === 'index.html' || page === '' || path === '/') {
         const user = await getUser();
         const cards = document.querySelectorAll('.hero-card');
@@ -159,6 +156,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
     }
+
+    await checkAccess();
+    await updateHeader();
 
     // Mobile Toggle
     if (toggle && nav) {
