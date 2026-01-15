@@ -42,20 +42,20 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function checkAccess() {
         const user = await getUser();
+        const isPrivate = PRIVATE_PAGES.includes(page);
+        const isAuth = AUTH_PAGES.includes(page);
 
-        // If on a private page and NO USER -> Go to Login
-        if (PRIVATE_PAGES.includes(page) && !user) {
+        if (isPrivate && !user) {
             window.location.href = 'login.html';
             return;
         }
 
-        // If on auth page and HAS USER -> Go to Home
-        if (AUTH_PAGES.includes(page) && user) {
+        if (isAuth && user) {
             window.location.href = '/';
             return;
         }
 
-        // Reveal the body if everything is fine (for pages that use visibility:hidden for anti-flicker)
+        // Reveal the body IF it was hidden by the anti-flicker style
         document.body.style.visibility = 'visible';
     }
 
@@ -74,7 +74,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (user) {
-            // Logged In
             authBtn.href = '/';
             authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
@@ -88,7 +87,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
         } else {
-            // Logged Out
             authBtn.href = 'login.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
 
@@ -157,7 +155,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+    // Run security check first
     await checkAccess();
+    // Safety fallback: reveal page after 3 seconds anyway if stuck
+    setTimeout(() => { document.body.style.visibility = 'visible'; }, 3000);
+
     await updateHeader();
 
     // Mobile Toggle
