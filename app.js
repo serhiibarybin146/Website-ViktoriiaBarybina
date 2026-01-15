@@ -28,10 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const page = path.split('/').pop() || 'index.html';
 
     async function getUser() {
-        if (!supabase) {
-            initSupabase();
-            if (!supabase) return null;
-        }
+        if (!supabase) initSupabase();
+        if (!supabase) return null;
         try {
             const { data: { user } } = await supabase.auth.getUser();
             return user;
@@ -53,17 +51,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function updateHeader() {
         const user = await getUser();
         const headerActions = document.querySelector('.header-actions');
-        const authBtn = document.getElementById('headerAuthBtn');
+        let authBtn = document.getElementById('headerAuthBtn');
 
         if (!headerActions) return;
 
+        // If button is missing from HTML for some reason (cache?), inject it
+        if (!authBtn) {
+            authBtn = document.createElement('a');
+            authBtn.id = 'headerAuthBtn';
+            authBtn.className = 'action-link auth-btn-dynamic';
+            headerActions.insertBefore(authBtn, headerActions.firstChild);
+        }
+
         if (user) {
             // Logged In
-            if (authBtn) {
-                authBtn.href = 'index.html';
-                authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
-                authBtn.classList.add('is-logged-in');
-            }
+            authBtn.href = 'index.html';
+            authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
             // Add Logout Button if not exists
             if (!document.getElementById('headerLogoutBtn')) {
@@ -75,12 +78,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
         } else {
-            // Logged Out
-            if (authBtn) {
-                authBtn.href = 'login.html';
-                authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
-                authBtn.classList.remove('is-logged-in');
-            }
+            // Logged Out - FORCE RUSSIAN
+            authBtn.href = 'login.html';
+            authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
+
             // Remove logout if exists
             const existingLogout = document.getElementById('headerLogoutBtn');
             if (existingLogout) existingLogout.remove();
@@ -100,7 +101,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('authError');
-
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
                 errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
@@ -114,29 +114,26 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
             const errorDiv = document.getElementById('authError');
-
             const { data, error } = await supabase.auth.signUp({
                 email, password, options: { data: { full_name: name } }
             });
-
             if (error) {
                 errorDiv.textContent = error.message;
             } else if (data.user && !data.session) {
                 errorDiv.style.color = 'green';
-                errorDiv.textContent = 'Проверьте почту для подтверждения!';
+                errorDiv.textContent = 'Регистрация успешна! Проверьте почту.';
             } else {
                 window.location.href = 'index.html';
             }
         });
     }
 
-    // Init Page logic
     await checkAccess();
-    updateHeader(); // Don't await this, let it run in background
+    await updateHeader();
 
     // Mobile Toggle
     if (toggle && nav) {
