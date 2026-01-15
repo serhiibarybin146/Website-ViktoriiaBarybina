@@ -1,4 +1,4 @@
-const CACHE_NAME = 'matrix-cache-v3';
+const CACHE_NAME = 'matrix-cache-v4';
 const ASSETS = [
   '/',
   '/index.html',
