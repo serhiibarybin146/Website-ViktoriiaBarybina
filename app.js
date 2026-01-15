@@ -8,7 +8,6 @@ function initSupabase() {
     if (window.supabase && !supabase) {
         try {
             supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            console.log("Supabase initialized");
         } catch (err) {
             console.error("Supabase Init Error:", err);
         }
@@ -24,8 +23,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
 
-    console.log("Checking access for page:", page);
-
     async function getUser() {
         if (!supabase) initSupabase();
         if (!supabase) return null;
@@ -33,7 +30,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await supabase.auth.getSession();
             return session ? session.user : null;
         } catch (e) {
-            console.error("Session check error:", e);
             return null;
         }
     }
@@ -43,28 +39,16 @@ document.addEventListener('DOMContentLoaded', async () => {
         const isPrivate = PRIVATE_PAGES.includes(page);
 
         if (isPrivate && !user) {
-            console.log("Access Denied. Redirecting to login...");
             window.location.href = 'login.html';
-            return false;
+            return;
         }
 
         if (AUTH_PAGES.includes(page) && user) {
             window.location.href = '/';
-            return false;
+            return;
         }
-
-        return true;
     }
 
-    // Immediate security check
-    const allowed = await checkAccess();
-
-    // Safety reveal
-    if (allowed) {
-        document.body.style.visibility = 'visible';
-    }
-
-    // Header logic
     async function updateHeader() {
         const user = await getUser();
         const headerActions = document.querySelector('.header-actions');
@@ -100,6 +84,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
+    // Run basic checks
+    await checkAccess();
     updateHeader();
 
     // Form Handlers
@@ -157,10 +143,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Mobile Toggle
     if (toggle && nav) {
         toggle.addEventListener('click', () => {
-            const isExpanded = toggle.getAttribute('aria-expanded') === 'true';
-            toggle.setAttribute('aria-expanded', !isExpanded);
             nav.classList.toggle('active');
-            nav.style.display = !isExpanded ? 'block' : '';
+            const isActive = nav.classList.contains('active');
+            toggle.setAttribute('aria-expanded', isActive);
+            nav.style.display = isActive ? 'block' : '';
         });
     }
 
