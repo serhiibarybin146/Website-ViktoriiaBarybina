@@ -72,17 +72,33 @@ document.addEventListener('DOMContentLoaded', async () => {
                 logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
                 logoutBtn.onclick = async () => {
                     await supabase.auth.signOut();
+                    localStorage.clear();
+                    sessionStorage.clear();
                     window.location.href = '/';
                 };
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
+            }
+            if (document.getElementById('navLogoutLink')) {
+                document.getElementById('navLogoutLink').style.display = 'block';
             }
         } else {
             authBtn.href = 'login.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
             const existingLogout = document.getElementById('headerLogoutBtn');
             if (existingLogout) existingLogout.remove();
+            if (document.getElementById('navLogoutLink')) {
+                document.getElementById('navLogoutLink').style.display = 'none';
+            }
         }
     }
+
+    // Expose a global logout for emergencies
+    window.forceSignOut = async () => {
+        if (supabase) await supabase.auth.signOut();
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.href = '/';
+    };
 
     // Run basic checks
     await checkAccess();
