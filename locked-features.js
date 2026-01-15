@@ -34,10 +34,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // let's ensure we handle it correctly.
 
         card.addEventListener('click', (e) => {
-            // Prevent default navigation if it's an anchor (even though we changed to div for safety in HTML step, 
-            // logic should be robust).
+            // EXCEPTION: If the card points to matrix.html, let app.js handle it (redirect to login)
+            if (card.getAttribute('href')?.includes('matrix.html')) {
+                return;
+            }
+
             e.preventDefault();
-            e.stopPropagation(); // Stop bubbling if needed
+            e.stopPropagation();
 
             const feature = card.getAttribute('data-feature');
             openModal(feature);
