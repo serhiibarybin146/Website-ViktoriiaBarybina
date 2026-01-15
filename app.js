@@ -95,18 +95,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 logoutBtn.onclick = forceSignOut;
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
-            // Nav list link (mobile/desktop link)
-            if (!document.getElementById('navLogoutItem') && navList) {
-                const li = document.createElement('li');
-                li.id = 'navLogoutItem';
-                li.innerHTML = '<a href="#" class="nav-link" onclick="forceSignOut(); return false;">Выйти</a>';
-                navList.appendChild(li);
+            // Nav list link
+            if (document.getElementById('navLogoutLink')) {
+                document.getElementById('navLogoutLink').style.display = 'block';
             }
         } else {
             const existingBtn = document.getElementById('headerLogoutBtn');
             if (existingBtn) existingBtn.remove();
-            const existingItem = document.getElementById('navLogoutItem');
-            if (existingItem) existingItem.remove();
+
+            if (document.getElementById('navLogoutLink')) {
+                document.getElementById('navLogoutLink').style.display = 'none';
+            }
         }
     }
 
@@ -178,9 +177,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     // PWA
+    // SW NUKE - FORCE UNREGISTER
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('/sw.js').catch(() => { });
+        navigator.serviceWorker.getRegistrations().then(function (registrations) {
+            for (let registration of registrations) {
+                registration.unregister();
+                console.log("Service Worker Unregistered");
+            }
         });
     }
+
+    // DEBUG BAR
+    const debugBar = document.createElement('div');
+    debugBar.style.cssText = "position:fixed;top:0;left:0;width:100%;background:red;color:white;z-index:99999;padding:5px;font-size:12px;text-align:center;";
+    const u = await getUser();
+    debugBar.innerHTML = `DEBUG: Page=${page}, User=${u ? 'LOGGED_IN' : 'GUEST'}, Path=${path}`;
+    document.body.appendChild(debugBar);
 });
