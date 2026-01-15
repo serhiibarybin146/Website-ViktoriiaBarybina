@@ -104,10 +104,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         const cards = document.querySelectorAll('.hero-card');
 
         cards.forEach(card => {
-            const isMatrix = card.getAttribute('href') === 'matrix.html';
+            const href = card.getAttribute('href');
+            const isMatrix = href === 'matrix.html' || href === '/matrix.html' || href?.includes('matrix.html');
 
-            // If logged in, unlock everything
-            if (user) {
+            // If logged in, unlock core matrix, but keep others as "request-based" (locked)
+            if (user && isMatrix) {
                 card.classList.remove('is-locked');
                 card.classList.add('is-unlocked');
                 const lockIcon = card.querySelector('.card-lock-icon');
@@ -118,9 +119,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             card.addEventListener('click', (e) => {
-                if (!user && (isMatrix || card.classList.contains('is-locked'))) {
-                    e.preventDefault();
-                    window.location.href = 'login.html';
+                if (!user) {
+                    if (isMatrix) {
+                        // For main matrix -> go to login
+                        e.preventDefault();
+                        window.location.href = 'login.html';
+                    } else {
+                        // For other cards -> show modal (this is handled by the common modal listener if present, 
+                        // but we stop execution here to prevent accidental navigation)
+                        e.preventDefault();
+                    }
                 }
             });
         });
