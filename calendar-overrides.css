@@ -1,0 +1,147 @@
+/* Borders for all day cells except weekday header */
+.calendar-day {
+    border: 2px solid rgba(146, 197, 191, 0.9);
+}
+
+/* Weekday headers must NOT have border */
+.calendar-header {
+    border: none !important;
+}
+
+/* Empty cells: override any dashed styles */
+.calendar-day.empty {
+    border: 2px solid rgba(146, 197, 191, 0.9) !important;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Summary boxes: border + 2-column layout (label left, content right) */
+.footer-box {
+    border: 2px solid rgba(146, 197, 191, 0.9);
+    background: #fff;
+    border-radius: 20px;
+
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    column-gap: 0;
+    align-items: start;
+
+    padding: 14px 14px;
+}
+
+/* Left column header */
+.footer-box h3 {
+    grid-column: 1;
+    margin: 0;
+    font-size: 0.90rem;
+    font-weight: 800;
+    line-height: 1.2;
+    padding-right: 12px;
+    white-space: nowrap;
+}
+
+/* Right column content - vertical divider */
+.footer-box>p,
+.footer-box>.focus-tags {
+    grid-column: 2;
+    margin: 0;
+    padding-left: 16px;
+    border-left: 2px solid rgba(146, 197, 191, 0.7);
+    min-width: 0;
+}
+
+/* Tip box marker */
+.footer-box>p {
+    position: relative;
+    font-size: 0.90rem;
+    line-height: 1.25;
+}
+
+.footer-box>p::before {
+    content: "•";
+    display: inline-block;
+    margin-right: 9px;
+    font-weight: 900;
+}
+
+/* Focus tags grid */
+.focus-tags {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 6px 18px;
+}
+
+/* Focus tag item */
+.focus-tag {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9rem;
+    line-height: 1.2;
+    min-width: 0;
+}
+
+.focus-tag::before {
+    content: "•";
+    font-weight: 900;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+.focus-tag span,
+.focus-tag {
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px),
+(max-height: 750px) {
+    .calendar-grid {
+        gap: 4px;
+    }
+
+    .calendar-header {
+        font-size: 0.8rem;
+        padding: 0.6rem 0;
+    }
+}
+
+/* 1) CALENDAR MAIN — desktop overrides */
+@media (min-width: 1024px) {
+
+    /* 1) Фиксируем рабочую ширину календаря на десктопе */
+    .calendar-main {
+        max-width: 1440px;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* 2) Управляем вертикальными расстояниями через gap */
+    .calendar-content-wrapper {
+        gap: 12px;
+    }
+
+    /* 3) Запрещаем grid-container растягиваться */
+    .calendar-grid-container {
+        flex: 0 0 auto;
+        margin-bottom: 0;
+        overflow: hidden;
+    }
+
+    /* 4) Делаем сетке фиксируемую высоту */
+    .calendar-grid {
+        height: clamp(520px, 60vh, 670px);
+        gap: 8px;
+    }
+
+    /* 5) Убираем margin-top у footer-grid */
+    .calendar-footer-grid {
+        margin-top: 0;
+        gap: 16px;
+        /* Increased gap */
+    }
+
+    /* Wider layout for tags */
+    .focus-tags {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+}

@@ -1,0 +1,851 @@
+/*
+Theme Name: Astra Child
+Theme URI: https://wpastra.com/
+Template: astra
+Author: Antigravity Agent
+Author URI: https://wpastra.com/
+Description: Astra Child Theme
+Version: 1.2.0 (Visual Fixes Refreshed)
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: astra-child
+*/
+
+:root {
+    /* Colors */
+    --bg-color: #EAE6DE;
+    --text-main: #1A1A1A;
+    --text-muted: #555555;
+    --glass-bg: rgba(234, 230, 222, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+
+    /* Spacing */
+    --container-padding: 2rem;
+    --header-height: 80px;
+
+    /* Typography */
+    --font-main: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    --font-ui: 'Inter', sans-serif;
+    --font-calendar: 'DM Sans', sans-serif;
+
+    /* Chakra Colors (Vibrant) */
+    --chakra-purple-bg: #9b5DE5;
+    --chakra-blue-bg: #2d6cdf;
+    --chakra-cyan-bg: #4cc9f0;
+    --chakra-green-bg: #aacc00;
+    --chakra-yellow-bg: #ffbd00;
+    --chakra-orange-bg: #fb8500;
+    --chakra-red-bg: #f94144;
+    --accent-main: #cc3366;
+
+    /* Calendar Specific */
+    --cal-pill-green: #E8F5E9;
+    --cal-pill-green-text: #2E7D32;
+    --cal-pill-blue: #E3F2FD;
+    --cal-pill-blue-text: #1565C0;
+    --cal-pill-yellow: #FFF9C4;
+    --cal-pill-yellow-text: #F9A825;
+}
+
+/* =========================================
+   GLOBAL RESET & TYPOGRAPHY FIXES (CRITICAL)
+   ========================================= */
+/* Force styles on body and Elementor wrappers to fix font inheritance */
+body,
+.elementor-widget-heading .elementor-heading-title,
+.elementor-widget-text-editor,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+span,
+div,
+input,
+button,
+select,
+textarea {
+    font-family: var(--font-main) !important;
+    color: var(--text-main);
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    /* Default beige */
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+    max-width: 100%;
+    display: block;
+}
+
+/* =========================================
+   NUCLEAR RESET FOR ASTRA & WORDPRESS
+   ========================================= */
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+/* Force Astra wrappers to be full width */
+#page,
+.hfeed,
+.site,
+.site-content,
+.ast-container,
+.entry-content {
+    margin: 0 !important;
+    padding: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+/* Remove default Elementor widget spacing if any */
+.elementor-column-gap-default>.elementor-column>.elementor-element-populated {
+    padding: 0 !important;
+}
+
+/* Hide Default WordPress/Astra Titles */
+.entry-title,
+.page-title,
+.ast-title-bar-wrap,
+.ast-primary-header-bar {
+    display: none !important;
+}
+
+/* =========================================
+   PAGE WRAPPERS (Crucial for Elementor)
+   ========================================= */
+/* Use this wrapper in every HTML snippet to guarantee full height and background */
+.custom-page-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    padding-top: var(--header-height);
+    /* Space for header */
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Styles (If you use the HTML header) */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--container-padding);
+    z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+}
+
+.site-header:hover,
+.site-header:focus-within {
+    background-color: rgba(234, 230, 222, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+.header-inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-weight: 700;
+    font-size: 1.65rem;
+    display: flex;
+    align-items: center;
+}
+
+.logo-text {
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
+.brand-name {
+    color: var(--text-main);
+}
+
+.brand-suffix {
+    color: var(--text-main);
+    margin-left: 0.4rem;
+}
+
+.mobile-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* =========================================
+   HOME PAGE STYLES
+   ========================================= */
+.custom-page-wrapper.home-bg {
+    background-color: var(--bg-color);
+    background-image: url('https://viktoriibarybina.com/wp-content/uploads/hero-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.custom-page-wrapper.solid-bg {
+    background-color: var(--bg-color);
+}
+
+.hero {
+    /* Removed min-height 100vh here as wrapper handles it */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    padding: 2rem var(--container-padding);
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.hero-headline {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 300;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
+    max-width: 20ch;
+    margin-top: 2rem;
+}
+
+.hero-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 2rem;
+}
+
+/* Cards */
+.hero-card {
+    background-color: transparent;
+    perspective: 1000px;
+    cursor: pointer;
+    min-height: 220px;
+    outline: none;
+    border-radius: 20px;
+}
+
+.hero-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 20px;
+}
+
+.hero-card:hover .hero-card-inner,
+.hero-card:focus-within .hero-card-inner {
+    transform: rotateY(180deg);
+}
+
+.hero-card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+.hero-card-front {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.hero-card-front.glass-card--dark {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-label {
+    font-size: 1.4rem;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+
+.card-arrow {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    opacity: 0.6;
+}
+
+.hero-card-back {
+    background: #fff;
+    color: var(--text-main);
+    transform: rotateY(180deg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card-desc {
+    font-family: var(--font-ui);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    width: 100%;
+}
+
+.card-cta {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+/* Locked Features */
+.hero-card.is-locked .hero-card-front {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.hero-card.is-locked .hero-card-front.glass-card--dark {
+    background: rgba(28, 28, 28, 0.85);
+}
+
+.card-lock-icon {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.5rem;
+    color: var(--text-color, #1A1A1A);
+    opacity: 0.7;
+}
+
+.hero-card.is-locked .hero-card-back {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.locked-content {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+}
+
+.locked-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-cta-locked {
+    background: var(--text-color, #1A1A1A);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    width: fit-content;
+}
+
+/* Modal Styles */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-container {
+    background: #fff;
+    width: 90%;
+    max-width: 480px;
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.modal-overlay.is-open .modal-container {
+    transform: translateY(0);
+}
+
+.modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+}
+
+.modal-icon {
+    font-size: 3rem;
+    color: rgba(146, 197, 191, 1);
+    margin-bottom: 1rem;
+}
+
+.modal-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.locked-request-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    text-align: left;
+}
+
+.form-group input {
+    padding: 0.8rem 1rem;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+/* =========================================
+   MATRIX PAGE STYLES
+   ========================================= */
+.matrix-form-container {
+    max-width: 600px;
+    margin: 4rem auto 0;
+    padding: 3rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.matrix-form-container h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    font-weight: 400;
+}
+
+.date-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 320px;
+    margin: 2rem auto 0;
+}
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+.date-form input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    font-size: 1rem;
+    outline: none;
+    background: #fff;
+}
+
+.cta-button {
+    background: #1A1A1A;
+    color: #fff;
+    border: none;
+    padding: 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* =========================================
+   MATRIX RESULT STYLES
+   ========================================= */
+.matrix-result-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 var(--container-padding) 4rem;
+    width: 100%;
+}
+
+.matrix-header {
+    margin-bottom: 2rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.matrix-result-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+@media (min-width: 1024px) {
+    .matrix-result-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.result-sidebar {
+    background: #fff;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+}
+
+.info-card {
+    padding: 1.5rem;
+    background: #fafafa;
+    border-radius: 12px;
+    margin-bottom: 2rem;
+}
+
+.date-display {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.age-display {
+    color: var(--text-muted);
+}
+
+.destiny-block h3,
+.stats-block h3 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.destiny-item,
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.4rem;
+}
+
+.sub-values {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.matrix-visual-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+#svg {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+}
+
+.health-table-wrapper {
+    overflow-x: auto;
+}
+
+.health-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.health-table th {
+    text-align: left;
+    padding: 0.8rem;
+    border-bottom: 2px solid #eee;
+    color: #888;
+    font-weight: 500;
+}
+
+.health-table td {
+    padding: 0.8rem;
+    border-bottom: 1px solid #eee;
+}
+
+.chakra-name {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 500;
+}
+
+.dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 0.5rem;
+}
+
+.dot-purple {
+    background: #9b5DE5;
+}
+
+.dot-blue {
+    background: #2d6cdf;
+}
+
+.dot-cyan {
+    background: #4cc9f0;
+}
+
+.dot-green {
+    background: #aacc00;
+}
+
+.dot-yellow {
+    background: #ffbd00;
+}
+
+.dot-orange {
+    background: #fb8500;
+}
+
+.dot-red {
+    background: #f94144;
+}
+
+/* =========================================
+   CALENDAR STYLES
+   ========================================= */
+/* Specific Wrapper to Apply Texture and Color */
+.custom-page-wrapper.calendar-bg {
+    background-color: #659DA1;
+    background-image: url('https://www.transparenttextures.com/patterns/wall-4-light.png');
+    font-family: var(--font-calendar) !important;
+}
+
+/* Pseudo-element for matrix overlay pattern on Calendar */
+.custom-page-wrapper.calendar-bg::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+}
+
+.calendar-main {
+    max-width: 1440px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 2;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    flex: 1;
+}
+
+.calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    padding: 0.5rem 0;
+    margin-bottom: 0.5rem;
+}
+
+.weekday {
+    text-align: center;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.9rem;
+}
+
+.calendar-content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.calendar-grid-container {
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    border-radius: 24px;
+    padding: 0.6rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    flex-grow: 1;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: auto repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    height: 100%;
+    min-height: 500px;
+}
+
+.calendar-day {
+    background: #fff;
+    border-radius: 12px;
+    padding: 8px;
+    border: 2px solid rgba(146, 197, 191, 0.9);
+    min-height: 80px;
+}
+
+.calendar-day.empty {
+    background: transparent;
+    border: 2px solid rgba(146, 197, 191, 0.9);
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+    .calendar-content-wrapper {
+        gap: 12px;
+        overflow: hidden;
+        height: 100%;
+    }
+
+    .calendar-grid-container {
+        margin-bottom: 0;
+        overflow: hidden;
+        flex: 0 0 auto;
+    }
+
+    .calendar-grid {
+        height: auto;
+        gap: 8px;
+    }
+
+    .calendar-footer-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 0;
+    }
+}
+
+.footer-box {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+}
+
+.focus-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.focus-tag {
+    background: #fff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}

@@ -1,0 +1,35 @@
+<!-- 
+    PAGE: MATRIX (Elementor HTML Widget Content)
+    VERSION: 2.1 (FIXED)
+-->
+<div class="custom-page-wrapper home-bg">
+    <!-- Optional Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo"><span class="brand-name">Viktoriia</span><span
+                    class="brand-suffix">Barybina</span></a>
+        </div>
+    </header>
+
+    <section class="hero matrix-page">
+        <div class="hero-grid">
+            <!-- Form Section -->
+            <div class="matrix-form-container glass-card">
+                <h1>Матрица Судьбы</h1>
+                <p class="subtitle">Рассчитайте свою карту и узнайте предназначение</p>
+
+                <form id="matrixForm" class="date-form">
+                    <div class="input-wrapper">
+                        <iconify-icon icon="solar:calendar-linear" class="input-icon"></iconify-icon>
+                        <input type="text" id="dateInput" placeholder="ДД.ММ.ГГГГ" required list="recentDates"
+                            inputmode="numeric">
+                        <datalist id="recentDates">
+                            <!-- Populated by JS -->
+                        </datalist>
+                    </div>
+                    <button type="submit" class="cta-button">Рассчитать</button>
+                </form>
+            </div>
+        </div>
+    </section>
+</div>

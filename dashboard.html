@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Viktoriia Barybina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="logo" aria-label="Viktoriia Barybina Home">
+                <div class="logo-text">
+                    <span class="brand-name">Viktoriia</span>
+                    <span class="brand-suffix">Barybina</span>
+                </div>
+            </a>
+            <div class="header-actions">
+                <button class="mobile-toggle" aria-label="Toggle menu" aria-controls="mainNav" aria-expanded="false">
+                    <iconify-icon icon="solar:hamburger-menu-linear"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="screen-container">
+        <div class="products-wrapper">
+            <div class="dashboard-head">
+                <h1 class="dashboard-title">Welcome back!</h1>
+                <p class="dashboard-subtitle">Ваш личный кабинет для управления расчетами и консультациями.</p>
+            </div>
+
+            <div class="products-grid">
+                <!-- Navigation Cards -->
+                <a href="products.html" class="product-card" style="text-decoration:none; color:inherit;">
+                    <div class="product-img" style="background:#F0F4F8; color:#334E68;">
+                        <iconify-icon icon="solar:box-linear" style="font-size: 4rem;"></iconify-icon>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Browse Products</h3>
+                        <p class="product-price">View our full catalog</p>
+                    </div>
+                </a>
+
+                <div class="product-card">
+                    <div class="product-img" style="background:#F0F4F8; color:#334E68;">
+                        <iconify-icon icon="solar:bill-list-linear" style="font-size: 4rem;"></iconify-icon>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">My Orders</h3>
+                        <p class="product-price">Track shipment status</p>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <div class="product-img" style="background:#F0F4F8; color:#334E68;">
+                        <iconify-icon icon="solar:settings-linear" style="font-size: 4rem;"></iconify-icon>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-title">Settings</h3>
+                        <p class="product-price">Manage account preferences</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,125 @@
+<!-- 
+    PAGE: MATRIX RESULT (Elementor HTML Widget Content)
+    VERSION: 2.2 (No BG Image)
+-->
+<div class="custom-page-wrapper solid-bg">
+    <!-- Optional Header -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo"><span class="brand-name">Viktoriia</span><span
+                    class="brand-suffix">Barybina</span></a>
+        </div>
+    </header>
+
+    <div class="matrix-result-container">
+        <div class="matrix-header">
+            <a href="/matrix/" class="back-link"><iconify-icon icon="solar:arrow-left-linear"></iconify-icon> Назад</a>
+        </div>
+
+        <div class="matrix-result-grid">
+
+            <!-- LEFT: Sidebar (Date & Stats) -->
+            <div class="result-sidebar">
+                <div class="info-card glass-card" id="birthdate-label"></div>
+
+                <div class="destiny-block">
+                    <h3>Предназначение</h3>
+                    <div class="destiny-item"><span class="label">Личное:</span><span class="value"
+                            id="val-personal-total">-</span></div>
+                    <div class="destiny-item"><span class="label">Социальное:</span><span class="value"
+                            id="val-social-total">-</span></div>
+                    <div class="destiny-item"><span class="label">Духовное:</span><span class="value"
+                            id="val-spiritual">-</span></div>
+                    <div class="destiny-item"><span class="label">Планетарное:</span><span class="value"
+                            id="val-planetary">-</span></div>
+                </div>
+
+                <div class="stats-block">
+                    <h3>Коды Сил</h3>
+                    <div class="stat-row"><span>Сила Рода:</span><span id="val-ancestral-power">-</span></div>
+                    <div class="stat-row"><span>Код М:</span><span id="val-male-code">-</span></div>
+                    <div class="stat-row"><span>Код Ж:</span><span id="val-female-code">-</span></div>
+                    <div class="stat-row"><span>Внутренний:</span><span id="val-internal-code">-</span></div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Matrix Visualization + Tables -->
+            <div class="matrix-main-content">
+                <div class="matrix-visual-wrapper glass-card">
+                    <svg id="svg" viewBox="0 0 700 700" preserveAspectRatio="xMidYMid meet"></svg>
+                </div>
+
+                <div class="health-table-wrapper glass-card">
+                    <h3>Карта Здоровья</h3>
+                    <table class="health-table">
+                        <thead>
+                            <tr>
+                                <th>Чакра</th>
+                                <th>Физика</th>
+                                <th>Энергия</th>
+                                <th>Эмоции</th>
+                                <th>Название</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="row-purple">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-purple"></span>Сахасрара</td>
+                            </tr>
+                            <tr class="row-blue">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-blue"></span>Аджна</td>
+                            </tr>
+                            <tr class="row-cyan">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-cyan"></span>Вишудха</td>
+                            </tr>
+                            <tr class="row-green">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-green"></span>Анахата</td>
+                            </tr>
+                            <tr class="row-yellow">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-yellow"></span>Манипура</td>
+                            </tr>
+                            <tr class="row-orange">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-orange"></span>Свадхистана</td>
+                            </tr>
+                            <tr class="row-red">
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td class="chakra-name"><span class="dot dot-red"></span>Муладхара</td>
+                            </tr>
+                            <tr class="row-sum">
+                                <td class="sum-cell">-</td>
+                                <td class="sum-cell">-</td>
+                                <td class="sum-cell">-</td>
+                                <td class="chakra-name"><strong>Итог</strong></td>
+                            </tr>
+                            <tr class="row-total">
+                                <td class="total-cell">-</td>
+                                <td class="total-cell">-</td>
+                                <td class="total-cell">-</td>
+                                <td class="chakra-name"><strong>Энергия</strong></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
