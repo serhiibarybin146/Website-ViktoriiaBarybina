@@ -17,11 +17,13 @@ function initSupabase() {
 document.addEventListener('DOMContentLoaded', async () => {
     initSupabase();
 
-    const AUTH_PAGES = ['login.html', 'register.html'];
-    const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'dashboard.html', 'products.html'];
+    const AUTH_PAGES = ['login.html', 'register.html', 'login', 'register'];
+    const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'matrix', 'matrix-result'];
 
     const path = window.location.pathname;
+    // Get page name without extension for more robust matching
     const page = path.split('/').pop() || 'index.html';
+    const pageName = page.replace('.html', '');
 
     async function getUser() {
         if (!supabase) initSupabase();
@@ -36,18 +38,32 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function checkAccess() {
         const user = await getUser();
-        const isPrivate = PRIVATE_PAGES.includes(page);
+        const isPrivate = PRIVATE_PAGES.includes(page) || PRIVATE_PAGES.includes(pageName);
+        const isAuth = AUTH_PAGES.includes(page) || AUTH_PAGES.includes(pageName);
 
         if (isPrivate && !user) {
+            console.log("Access denied to private page. Redirecting...");
             window.location.href = 'login.html';
             return;
         }
 
-        if (AUTH_PAGES.includes(page) && user) {
+        if (isAuth && user) {
             window.location.href = '/';
             return;
         }
     }
+
+    const forceSignOut = async () => {
+        if (supabase) await supabase.auth.signOut();
+        localStorage.clear();
+        sessionStorage.clear();
+        // Clear all cookies
+        document.cookie.split(";").forEach(function (c) {
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+        window.location.href = '/';
+    };
+    window.forceSignOut = forceSignOut;
 
     async function updateHeader() {
         const user = await getUser();
@@ -66,7 +82,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             authBtn.href = '/';
             authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
-            // Show Logout Icon in dynamic area
             if (!document.getElementById('headerLogoutBtn')) {
                 const logoutBtn = document.createElement('button');
                 logoutBtn.id = 'headerLogoutBtn';
@@ -83,31 +98,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    const forceSignOut = async () => {
-        if (supabase) await supabase.auth.signOut();
-        localStorage.clear();
-        sessionStorage.clear();
-        // Clear all cookies
-        document.cookie.split(";").forEach(function (c) {
-            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-        });
-        window.location.href = '/';
-    };
-    window.forceSignOut = forceSignOut;
-
+    // Run security checks
     await checkAccess();
     updateHeader();
 
     // Index Page interaction (SECURE BY DEFAULT)
-    if (page === 'index.html' || page === '' || path === '/') {
+    if (pageName === 'index' || page === 'index.html' || page === '' || path === '/') {
         const user = await getUser();
         const cards = document.querySelectorAll('.hero-card');
 
         cards.forEach(card => {
             const href = card.getAttribute('href');
-            const isMatrix = href === 'matrix.html' || href === '/matrix.html' || href?.includes('matrix.html');
+            const isMatrix = href?.includes('matrix.html') || href === 'matrix' || href === '/matrix';
 
-            // If logged in, unlock core matrix, but keep others as "request-based" (locked)
             if (user && isMatrix) {
                 card.classList.remove('is-locked');
                 card.classList.add('is-unlocked');
@@ -121,12 +124,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.addEventListener('click', (e) => {
                 if (!user) {
                     if (isMatrix) {
-                        // For main matrix -> go to login
                         e.preventDefault();
                         window.location.href = 'login.html';
                     } else {
-                        // For other cards -> show modal (this is handled by the common modal listener if present, 
-                        // but we stop execution here to prevent accidental navigation)
                         e.preventDefault();
                     }
                 }
@@ -134,7 +134,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Mobile Toggle
+    // Mobile Toggle - FIXING MISSING DECLARATIONS
+    const toggle = document.querySelector('.mobile-toggle');
+    const nav = document.querySelector('.main-nav');
     if (toggle && nav) {
         toggle.addEventListener('click', () => {
             nav.classList.toggle('active');
