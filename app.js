@@ -2,10 +2,11 @@
 const SUPABASE_URL = 'https://vunhqcczjkxneltnffbr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_tjoFdDgs4I3zgrkHOe0FgQ_uKm4ivL3';
 
+// Direct Global Initialization
 let supabase = null;
 
 function initSupabase() {
-    if (window.supabase && !supabase) {
+    if (!supabase && typeof window.supabase !== 'undefined') {
         try {
             supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         } catch (err) {
@@ -14,6 +15,20 @@ function initSupabase() {
     }
 }
 
+// Global Logout Utility
+const forceSignOut = async () => {
+    initSupabase();
+    if (supabase) await supabase.auth.signOut();
+    localStorage.clear();
+    sessionStorage.clear();
+    // Clear all cookies for good measure
+    document.cookie.split(";").forEach((c) => {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+    window.location.href = '/login.html';
+};
+window.forceSignOut = forceSignOut;
+
 document.addEventListener('DOMContentLoaded', async () => {
     initSupabase();
 
@@ -21,12 +36,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'matrix', 'matrix-result'];
 
     const path = window.location.pathname;
-    // Get page name without extension for more robust matching
     const page = path.split('/').pop() || 'index.html';
-    const pageName = page.replace('.html', '');
+    const pageName = page.replace('.html', '').toLowerCase();
 
     async function getUser() {
-        if (!supabase) initSupabase();
+        initSupabase();
         if (!supabase) return null;
         try {
             const { data: { session } } = await supabase.auth.getSession();
@@ -38,51 +52,42 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function checkAccess() {
         const user = await getUser();
-        const isPrivate = PRIVATE_PAGES.includes(page) || PRIVATE_PAGES.includes(pageName);
-        const isAuth = AUTH_PAGES.includes(page) || AUTH_PAGES.includes(pageName);
+        const isPrivate = PRIVATE_PAGES.some(p => page.includes(p) || pageName === p);
+        const isAuth = AUTH_PAGES.some(p => page.includes(p) || pageName === p);
 
         if (isPrivate && !user) {
-            console.log("Access denied to private page. Redirecting...");
-            window.location.href = 'login.html';
-            return;
+            window.location.replace('login.html');
+            return false;
         }
 
         if (isAuth && user) {
-            window.location.href = '/';
-            return;
+            window.location.replace('/');
+            return false;
         }
+        return true;
     }
-
-    const forceSignOut = async () => {
-        if (supabase) await supabase.auth.signOut();
-        localStorage.clear();
-        sessionStorage.clear();
-        // Clear all cookies
-        document.cookie.split(";").forEach(function (c) {
-            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-        });
-        window.location.href = '/';
-    };
-    window.forceSignOut = forceSignOut;
 
     async function updateHeader() {
         const user = await getUser();
         const headerActions = document.querySelector('.header-actions');
+        const navList = document.querySelector('.nav-list');
         let authBtn = document.getElementById('headerAuthBtn');
 
-        if (!headerActions) return;
-        if (!authBtn) {
-            authBtn = document.createElement('a');
-            authBtn.id = 'headerAuthBtn';
-            authBtn.className = 'action-link auth-btn-dynamic';
-            headerActions.insertBefore(authBtn, headerActions.firstChild);
+        // 1. Update main action button
+        if (authBtn) {
+            if (user) {
+                authBtn.href = '/';
+                authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
+            } else {
+                authBtn.href = 'login.html';
+                authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
+            }
         }
 
+        // 2. Add/Remove logout icons and links
         if (user) {
-            authBtn.href = '/';
-            authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
-
-            if (!document.getElementById('headerLogoutBtn')) {
+            // Header icon
+            if (!document.getElementById('headerLogoutBtn') && headerActions) {
                 const logoutBtn = document.createElement('button');
                 logoutBtn.id = 'headerLogoutBtn';
                 logoutBtn.className = 'icon-btn auth-btn-dynamic';
@@ -90,26 +95,35 @@ document.addEventListener('DOMContentLoaded', async () => {
                 logoutBtn.onclick = forceSignOut;
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
+            // Nav list link (mobile/desktop link)
+            if (!document.getElementById('navLogoutItem') && navList) {
+                const li = document.createElement('li');
+                li.id = 'navLogoutItem';
+                li.innerHTML = '<a href="#" class="nav-link" onclick="forceSignOut(); return false;">Выйти</a>';
+                navList.appendChild(li);
+            }
         } else {
-            authBtn.href = 'login.html';
-            authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
-            const existingLogout = document.getElementById('headerLogoutBtn');
-            if (existingLogout) existingLogout.remove();
+            const existingBtn = document.getElementById('headerLogoutBtn');
+            if (existingBtn) existingBtn.remove();
+            const existingItem = document.getElementById('navLogoutItem');
+            if (existingItem) existingItem.remove();
         }
     }
 
-    // Run security checks
-    await checkAccess();
+    // Run Security Check ASAP
+    const isAllowed = await checkAccess();
+    if (!isAllowed) return; // Stop if redirecting
+
     updateHeader();
 
-    // Index Page interaction (SECURE BY DEFAULT)
-    if (pageName === 'index' || page === 'index.html' || page === '' || path === '/') {
+    // Index Page specific logic
+    if (pageName === 'index' || page === 'index.html' || path === '/' || page === '') {
         const user = await getUser();
         const cards = document.querySelectorAll('.hero-card');
 
         cards.forEach(card => {
             const href = card.getAttribute('href');
-            const isMatrix = href?.includes('matrix.html') || href === 'matrix' || href === '/matrix';
+            const isMatrix = href?.includes('matrix.html') || href === 'matrix';
 
             if (user && isMatrix) {
                 card.classList.remove('is-locked');
@@ -127,22 +141,39 @@ document.addEventListener('DOMContentLoaded', async () => {
                         e.preventDefault();
                         window.location.href = 'login.html';
                     } else {
-                        e.preventDefault();
+                        // Let modal handle it or prevent if matrix
+                        if (isMatrix) e.preventDefault();
                     }
                 }
             });
         });
     }
 
-    // Mobile Toggle - FIXING MISSING DECLARATIONS
+    // Auth Forms
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('authError');
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
+            } else {
+                window.location.href = '/';
+            }
+        });
+    }
+
+    // Mobile menu toggle
     const toggle = document.querySelector('.mobile-toggle');
     const nav = document.querySelector('.main-nav');
     if (toggle && nav) {
         toggle.addEventListener('click', () => {
-            nav.classList.toggle('active');
-            const isActive = nav.classList.contains('active');
-            toggle.setAttribute('aria-expanded', isActive);
-            nav.style.display = isActive ? 'block' : '';
+            const active = nav.classList.toggle('active');
+            toggle.setAttribute('aria-expanded', active);
+            nav.style.display = active ? 'block' : '';
         });
     }
 
