@@ -65,90 +65,60 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (user) {
             authBtn.href = '/';
             authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
+
+            // Show Logout Icon in dynamic area
             if (!document.getElementById('headerLogoutBtn')) {
                 const logoutBtn = document.createElement('button');
                 logoutBtn.id = 'headerLogoutBtn';
                 logoutBtn.className = 'icon-btn auth-btn-dynamic';
                 logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
-                logoutBtn.onclick = async () => {
-                    await supabase.auth.signOut();
-                    localStorage.clear();
-                    sessionStorage.clear();
-                    window.location.href = '/';
-                };
+                logoutBtn.onclick = forceSignOut;
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
-            }
-            if (document.getElementById('navLogoutLink')) {
-                document.getElementById('navLogoutLink').style.display = 'block';
             }
         } else {
             authBtn.href = 'login.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
             const existingLogout = document.getElementById('headerLogoutBtn');
             if (existingLogout) existingLogout.remove();
-            if (document.getElementById('navLogoutLink')) {
-                document.getElementById('navLogoutLink').style.display = 'none';
-            }
         }
     }
 
-    // Expose a global logout for emergencies
-    window.forceSignOut = async () => {
+    const forceSignOut = async () => {
         if (supabase) await supabase.auth.signOut();
         localStorage.clear();
         sessionStorage.clear();
+        // Clear all cookies
+        document.cookie.split(";").forEach(function (c) {
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
         window.location.href = '/';
     };
+    window.forceSignOut = forceSignOut;
 
-    // Run basic checks
     await checkAccess();
     updateHeader();
 
-    // Form Handlers
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('authError');
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            if (error) {
-                errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
-            } else {
-                window.location.href = '/';
-            }
-        });
-    }
-
-    const registerForm = document.getElementById('registerForm');
-    if (registerForm) {
-        registerForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
-            const errorDiv = document.getElementById('authError');
-            const { data, error } = await supabase.auth.signUp({
-                email, password, options: { data: { full_name: name } }
-            });
-            if (error) {
-                errorDiv.textContent = error.message;
-            } else if (data.user && !data.session) {
-                errorDiv.style.color = 'green';
-                errorDiv.textContent = 'Проверьте почту для подтверждения!';
-            } else {
-                window.location.href = '/';
-            }
-        });
-    }
-
-    // Landing Page interaction
+    // Index Page interaction (SECURE BY DEFAULT)
     if (page === 'index.html' || page === '' || path === '/') {
         const user = await getUser();
-        document.querySelectorAll('.hero-card').forEach(card => {
+        const cards = document.querySelectorAll('.hero-card');
+
+        cards.forEach(card => {
+            const isMatrix = card.getAttribute('href') === 'matrix.html';
+
+            // If logged in, unlock everything
+            if (user) {
+                card.classList.remove('is-locked');
+                card.classList.add('is-unlocked');
+                const lockIcon = card.querySelector('.card-lock-icon');
+                if (lockIcon) {
+                    lockIcon.innerHTML = '<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>';
+                    lockIcon.className = 'card-arrow';
+                }
+            }
+
             card.addEventListener('click', (e) => {
-                if (!user && (card.getAttribute('href') === 'matrix.html' || card.classList.contains('is-locked'))) {
+                if (!user && (isMatrix || card.classList.contains('is-locked'))) {
                     e.preventDefault();
                     window.location.href = 'login.html';
                 }

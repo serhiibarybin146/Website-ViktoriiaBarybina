@@ -41,8 +41,7 @@
                 <ul class="nav-list">
                     <li><a href="services.html" class="nav-link">Услуги</a></li>
                     <li><a href="about.html" class="nav-link">Обо мне</a></li>
-                    <li><a href="#" class="nav-link" id="navLogoutLink" style="display:none;"
-                            onclick="forceSignOut(); return false;">Выйти</a></li>
+                    <li><a href="#" class="nav-link" onclick="forceSignOut(); return false;">Выйти</a></li>
                 </ul>
             </nav>
 
@@ -73,12 +72,12 @@
                 <!-- Cards Container -->
                 <div class="hero-cards">
                     <!-- Card 1 (Matrix Link) - UNLOCKED -->
-                    <a href="matrix.html" class="hero-card is-unlocked">
+                    <a href="matrix.html" class="hero-card is-locked" style="background: rgba(255, 255, 255, 0.4);">
                         <div class="hero-card-inner">
                             <div class="hero-card-face hero-card-front">
                                 <span class="card-label">Основная матрица</span>
-                                <div class="card-arrow"><iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
-                                </div>
+                                <div class="card-lock-icon"><iconify-icon
+                                        icon="solar:lock-keyhole-minimalistic-linear"></iconify-icon></div>
                             </div>
                             <div class="hero-card-face hero-card-back">
                                 <p class="card-desc">Рассчитайте свою персональную карту судьбы по дате рождения.</p>
