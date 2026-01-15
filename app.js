@@ -9,7 +9,6 @@ function initSupabase() {
     if (window.supabase && !supabase) {
         try {
             supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            console.log("Supabase Client Ready");
         } catch (err) {
             console.error("Supabase Init Error:", err);
         }
@@ -22,8 +21,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initSupabase();
 
+    // Pages configuration
     const AUTH_PAGES = ['login.html', 'register.html'];
-    const PRIVATE_PAGES = ['dashboard.html', 'products.html'];
+    // matrix.html and matrix-result.html are now PRIVATE
+    const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'dashboard.html', 'products.html'];
+
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
 
@@ -31,8 +33,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!supabase) initSupabase();
         if (!supabase) return null;
         try {
-            const { data: { user } } = await supabase.auth.getUser();
-            return user;
+            // Use getSession for faster check, then getUser for security
+            const { data: { session } } = await supabase.auth.getSession();
+            return session ? session.user : null;
         } catch (e) {
             return null;
         }
@@ -40,11 +43,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function checkAccess() {
         const user = await getUser();
-        if (AUTH_PAGES.includes(page) && user) {
-            window.location.href = 'index.html';
-        }
+
+        // If on a private page and NO USER -> Go to Login
         if (PRIVATE_PAGES.includes(page) && !user) {
             window.location.href = 'login.html';
+            return;
+        }
+
+        // If on auth page and HAS USER -> Go to Home
+        if (AUTH_PAGES.includes(page) && user) {
+            window.location.href = 'index.html';
+            return;
         }
     }
 
@@ -55,7 +64,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!headerActions) return;
 
-        // If button is missing from HTML for some reason (cache?), inject it
         if (!authBtn) {
             authBtn = document.createElement('a');
             authBtn.id = 'headerAuthBtn';
@@ -64,21 +72,22 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 
         if (user) {
-            // Logged In
+            // Logged In State
             authBtn.href = 'index.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
-            // Add Logout Button if not exists
+            // Ensure Logout button exists
             if (!document.getElementById('headerLogoutBtn')) {
                 const logoutBtn = document.createElement('button');
                 logoutBtn.id = 'headerLogoutBtn';
                 logoutBtn.className = 'icon-btn auth-btn-dynamic';
                 logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
+                logoutBtn.title = 'Выйти';
                 logoutBtn.onclick = logout;
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
         } else {
-            // Logged Out - FORCE RUSSIAN
+            // Logged Out State
             authBtn.href = 'login.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
 
@@ -89,11 +98,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function logout() {
-        if (supabase) await supabase.auth.signOut();
+        if (supabase) {
+            await supabase.auth.signOut();
+        }
         window.location.href = 'index.html';
     }
 
-    // Auth flows
+    // Auth Form Bindings
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -101,6 +112,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('authError');
+
             const { error } = await supabase.auth.signInWithPassword({ email, password });
             if (error) {
                 errorDiv.textContent = error.message === 'Invalid login credentials' ? 'Неверный email или пароль' : error.message;
@@ -114,26 +126,44 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
+            const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const name = document.getElementById('name').value;
             const errorDiv = document.getElementById('authError');
+
             const { data, error } = await supabase.auth.signUp({
                 email, password, options: { data: { full_name: name } }
             });
+
             if (error) {
                 errorDiv.textContent = error.message;
             } else if (data.user && !data.session) {
                 errorDiv.style.color = 'green';
-                errorDiv.textContent = 'Регистрация успешна! Проверьте почту.';
+                errorDiv.textContent = 'Проверьте почту для подтверждения!';
             } else {
                 window.location.href = 'index.html';
             }
         });
     }
 
+    // Initialize
     await checkAccess();
     await updateHeader();
+
+    // Index Page specific: lock non-primary cards for guests
+    if (page === 'index.html' || page === '') {
+        const user = await getUser();
+        const cards = document.querySelectorAll('.hero-card');
+        cards.forEach(card => {
+            card.addEventListener('click', (e) => {
+                // If guest and the card points to a private page or is explicitly locked
+                if (!user && (card.getAttribute('href') === 'matrix.html' || card.classList.contains('is-locked'))) {
+                    e.preventDefault();
+                    window.location.href = 'login.html';
+                }
+            });
+        });
+    }
 
     // Mobile Toggle
     if (toggle && nav) {
