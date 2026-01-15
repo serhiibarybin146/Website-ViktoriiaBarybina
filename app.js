@@ -2,13 +2,13 @@
 const SUPABASE_URL = 'https://vunhqcczjkxneltnffbr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_tjoFdDgs4I3zgrkHOe0FgQ_uKm4ivL3';
 
-// Initialize Supabase client
 let supabase = null;
 
 function initSupabase() {
     if (window.supabase && !supabase) {
         try {
             supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("Supabase initialized");
         } catch (err) {
             console.error("Supabase Init Error:", err);
         }
@@ -16,18 +16,15 @@ function initSupabase() {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const toggle = document.querySelector('.mobile-toggle');
-    const nav = document.querySelector('.main-nav');
-
     initSupabase();
 
-    // Pages configuration
     const AUTH_PAGES = ['login.html', 'register.html'];
     const PRIVATE_PAGES = ['matrix.html', 'matrix-result.html', 'dashboard.html', 'products.html'];
 
-    // Normalize path for checks
     const path = window.location.pathname;
     const page = path.split('/').pop() || 'index.html';
+
+    console.log("Checking access for page:", page);
 
     async function getUser() {
         if (!supabase) initSupabase();
@@ -36,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const { data: { session } } = await supabase.auth.getSession();
             return session ? session.user : null;
         } catch (e) {
+            console.error("Session check error:", e);
             return null;
         }
     }
@@ -43,29 +41,36 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function checkAccess() {
         const user = await getUser();
         const isPrivate = PRIVATE_PAGES.includes(page);
-        const isAuth = AUTH_PAGES.includes(page);
 
         if (isPrivate && !user) {
+            console.log("Access Denied. Redirecting to login...");
             window.location.href = 'login.html';
-            return;
+            return false;
         }
 
-        if (isAuth && user) {
+        if (AUTH_PAGES.includes(page) && user) {
             window.location.href = '/';
-            return;
+            return false;
         }
 
-        // Reveal the body IF it was hidden by the anti-flicker style
+        return true;
+    }
+
+    // Immediate security check
+    const allowed = await checkAccess();
+
+    // Safety reveal
+    if (allowed) {
         document.body.style.visibility = 'visible';
     }
 
+    // Header logic
     async function updateHeader() {
         const user = await getUser();
         const headerActions = document.querySelector('.header-actions');
         let authBtn = document.getElementById('headerAuthBtn');
 
         if (!headerActions) return;
-
         if (!authBtn) {
             authBtn = document.createElement('a');
             authBtn.id = 'headerAuthBtn';
@@ -76,33 +81,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (user) {
             authBtn.href = '/';
             authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
-
             if (!document.getElementById('headerLogoutBtn')) {
                 const logoutBtn = document.createElement('button');
                 logoutBtn.id = 'headerLogoutBtn';
                 logoutBtn.className = 'icon-btn auth-btn-dynamic';
                 logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon>';
-                logoutBtn.title = 'Выйти';
-                logoutBtn.onclick = logout;
+                logoutBtn.onclick = async () => {
+                    await supabase.auth.signOut();
+                    window.location.href = '/';
+                };
                 headerActions.insertBefore(logoutBtn, document.querySelector('.mobile-toggle'));
             }
         } else {
             authBtn.href = 'login.html';
             authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
-
             const existingLogout = document.getElementById('headerLogoutBtn');
             if (existingLogout) existingLogout.remove();
         }
     }
 
-    async function logout() {
-        if (supabase) {
-            await supabase.auth.signOut();
-        }
-        window.location.href = '/';
-    }
+    updateHeader();
 
-    // Forms
+    // Form Handlers
     const loginForm = document.getElementById('loginForm');
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -141,11 +141,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
-    // Index Page specific
+    // Landing Page interaction
     if (page === 'index.html' || page === '' || path === '/') {
         const user = await getUser();
-        const cards = document.querySelectorAll('.hero-card');
-        cards.forEach(card => {
+        document.querySelectorAll('.hero-card').forEach(card => {
             card.addEventListener('click', (e) => {
                 if (!user && (card.getAttribute('href') === 'matrix.html' || card.classList.contains('is-locked'))) {
                     e.preventDefault();
@@ -154,13 +153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             });
         });
     }
-
-    // Run security check first
-    await checkAccess();
-    // Safety fallback: reveal page after 3 seconds anyway if stuck
-    setTimeout(() => { document.body.style.visibility = 'visible'; }, 3000);
-
-    await updateHeader();
 
     // Mobile Toggle
     if (toggle && nav) {
