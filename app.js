@@ -165,6 +165,31 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
     }
 
+
+
+
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const name = document.getElementById('name').value;
+            const errorDiv = document.getElementById('authError');
+            const { data, error } = await supabase.auth.signUp({
+                email, password, options: { data: { full_name: name } }
+            });
+            if (error) {
+                errorDiv.textContent = error.message;
+            } else if (data.user && !data.session) {
+                errorDiv.style.color = 'green';
+                errorDiv.textContent = 'Проверьте почту для подтверждения!';
+            } else {
+                window.location.href = '/';
+            }
+        });
+    }
+
     // Mobile menu toggle
     const toggle = document.querySelector('.mobile-toggle');
     const nav = document.querySelector('.main-nav');
