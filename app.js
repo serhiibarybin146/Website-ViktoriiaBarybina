@@ -234,22 +234,32 @@ document.addEventListener('DOMContentLoaded', async () => {
                 card.classList.remove('is-locked');
                 card.classList.add('is-unlocked');
 
-                // Update front icon
+                // Update front icon to indicate it's now a link
                 const lockIcon = card.querySelector('.card-lock-icon');
                 if (lockIcon) {
                     lockIcon.innerHTML = '<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>';
                     lockIcon.className = 'card-arrow';
                 }
 
-                // Update back side content
-                const backContent = card.querySelector('.hero-card-back .locked-content');
-                if (backContent) {
-                    backContent.innerHTML = `
-                        <h4 class="locked-title" style="color: #4CAF50;">
-                            <iconify-icon icon="solar:check-circle-bold"></iconify-icon> Доступ открыт
-                        </h4>
-                        <p class="card-desc">Вам предоставлен полный доступ к этому разделу.</p>
-                        <button class="card-cta-locked" style="background: #4CAF50; border-color: #4CAF50;">Открыть раздел</button>
+                // Custom descriptions for each feature
+                const featureDetails = {
+                    'compatibility': 'Узнайте потенциал ваших отношений, общие задачи и кармические связи с партнером.',
+                    'year': 'Прогноз главных энергий вашего года — на что направить фокус и каких уроков ожидать.',
+                    'month': 'Детальный путеводитель по энергиям каждого месяца для вашего личного развития.',
+                    'calendar': 'Персональный расчет энергий на каждый день для эффективного планирования дел.',
+                    'child': 'Поймите таланты и особенности вашего ребенка через призму его даты рождения.'
+                };
+
+                // Update back side content to match "Main Matrix" style
+                const backFace = card.querySelector('.hero-card-back');
+                if (backFace) {
+                    const desc = featureDetails[featureKey] || 'Ваш персональный расчет уже готов. Нажмите, чтобы открыть.';
+                    backFace.innerHTML = `
+                        <p class="card-desc">${desc}</p>
+                        <div class="card-footer">
+                            <span class="card-cta">Посмотреть</span>
+                            <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+                        </div>
                     `;
                 }
             };
@@ -264,28 +274,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.addEventListener('click', (e) => {
                 // If the card is NOT locked, we should navigate
                 if (card.classList.contains('is-unlocked')) {
-                    // Find where this card is supposed to go
                     const featureMap = {
                         'matrix': 'matrix.html',
-                        'child': '#', // placeholder if separate page needed later
-                        'year': '#',
-                        'month': '#',
-                        'calendar': '#'
+                        'compatibility': 'matrix.html', // Pointing to calc for now
+                        'year': 'matrix.html',
+                        'month': 'matrix.html',
+                        'calendar': 'matrix.html'
                     };
                     const url = featureMap[featureKey];
                     if (url && url !== '#') {
                         e.preventDefault();
                         window.location.href = url;
                     }
-                    return; // Let locked-features.js or default handle if we don't have a URL
-                }
-
-                // If locked and base matrix - redirect to login
-                if (!user && isBaseMatrix) {
+                } else if (!user && isBaseMatrix) {
                     e.preventDefault();
                     window.location.href = 'login.html';
                 }
-                // Locked cards (non-matrix) are handled by locked-features.js (opening modal)
             });
         });
     }
