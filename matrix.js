@@ -61,11 +61,14 @@ function initMatrixForm(form) {
         const isoDate = `${y}-${m}-${d}`;
 
         // Save to history
-        if (!history.includes(val)) {
-            history.push(val);
-            if (history.length > 5) history.shift();
-            localStorage.setItem('matrix_history', JSON.stringify(history));
-        }
+        // 1. Remove if exists to move it to the end (most recent)
+        history = history.filter(h => h !== val);
+        // 2. Add as most recent
+        history.push(val);
+        // 3. Keep only last 3
+        if (history.length > 3) history = history.slice(-3);
+
+        localStorage.setItem('matrix_history', JSON.stringify(history));
         localStorage.setItem('matrix_last_date', val);
 
         window.location.href = `matrix-result.html?date=${encodeURIComponent(isoDate)}`;
