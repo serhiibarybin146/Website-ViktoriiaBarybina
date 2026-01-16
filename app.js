@@ -78,8 +78,6 @@ window.handleRegister = async function (event) {
                 <div style="text-align: center; padding: 20px;">
                     <iconify-icon icon="solar:check-circle-bold" style="font-size: 48px; color: #4CAF50;"></iconify-icon>
                     <h3 style="margin: 10px 0;">Успешно!</h3>
-                    <p>На ваш email <strong>${email}</strong> отправлено письмо для подтверждения.</p>
-                    <p style="font-size: 0.9em; color: #666;">Пожалуйста, перейдите по ссылке в письме.</p>
                     <a href="login.html" class="btn-primary" style="margin-top: 15px; display: inline-block; text-decoration: none;">Перейти ко входу</a>
                 </div>
             `;
