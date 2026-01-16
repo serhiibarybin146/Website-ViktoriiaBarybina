@@ -97,23 +97,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     .from('leads')
                     .insert([
                         {
-                            feature: feature,
+                            feature: feature || 'general',
                             full_name: name,
                             contact_info: contact,
                             status: 'new'
                         }
                     ]);
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Supabase error:', error);
+                    throw error;
+                }
 
                 alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
                 closeModal();
             } else {
-                throw new Error('Supabase client not found');
+                throw new Error('Supabase client not initialized. Please refresh the page.');
             }
         } catch (err) {
-            console.error('Submission error:', err);
-            alert('Извините, произошла ошибка. Попробуйте еще раз или напишите в Telegram.');
+            console.error('Submission catch:', err);
+            alert(`Ошибка: ${err.message || 'Неизвестная ошибка'}. Попробуйте еще раз или напишите в Telegram.`);
         } finally {
             submitBtn.disabled = false;
             submitBtn.textContent = originalText;
