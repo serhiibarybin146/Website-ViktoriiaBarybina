@@ -262,11 +262,30 @@ document.addEventListener('DOMContentLoaded', async () => {
             }
 
             card.addEventListener('click', (e) => {
+                // If the card is NOT locked, we should navigate
+                if (card.classList.contains('is-unlocked')) {
+                    // Find where this card is supposed to go
+                    const featureMap = {
+                        'matrix': 'matrix.html',
+                        'child': '#', // placeholder if separate page needed later
+                        'year': '#',
+                        'month': '#',
+                        'calendar': '#'
+                    };
+                    const url = featureMap[featureKey];
+                    if (url && url !== '#') {
+                        e.preventDefault();
+                        window.location.href = url;
+                    }
+                    return; // Let locked-features.js or default handle if we don't have a URL
+                }
+
+                // If locked and base matrix - redirect to login
                 if (!user && isBaseMatrix) {
                     e.preventDefault();
                     window.location.href = 'login.html';
                 }
-                // Locked cards (non-matrix) are handled by locked-features.js
+                // Locked cards (non-matrix) are handled by locked-features.js (opening modal)
             });
         });
     }
