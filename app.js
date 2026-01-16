@@ -2,12 +2,12 @@
 const SUPABASE_URL = 'https://vunhqcczjkxneltnffbr.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_tjoFdDgs4I3zgrkHOe0FgQ_uKm4ivL3';
 
-let supabaseClient = null;
+window.supabaseClient = null;
 
-function initSupabase() {
-    if (!supabaseClient && typeof window.supabase !== 'undefined') {
+window.initSupabase = function () {
+    if (!window.supabaseClient && typeof window.supabase !== 'undefined') {
         try {
-            supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         } catch (err) {
             console.error("Supabase Init Error:", err);
         }
@@ -28,7 +28,7 @@ window.handleLogin = async function (event) {
         errorDiv.textContent = 'Вход...';
     }
 
-    const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    const { error } = await window.supabaseClient.auth.signInWithPassword({ email, password });
 
     if (error) {
         if (errorDiv) {
@@ -56,7 +56,7 @@ window.handleRegister = async function (event) {
         errorDiv.textContent = 'Регистрация...';
     }
 
-    const { data, error } = await supabaseClient.auth.signUp({
+    const { data, error } = await window.supabaseClient.auth.signUp({
         email, password, options: {
             data: { full_name: name },
             emailRedirectTo: 'https://viktoriiabarybina.com/login.html'
@@ -86,7 +86,7 @@ window.handleRegister = async function (event) {
 // Global Logout
 window.forceSignOut = async () => {
     initSupabase();
-    if (supabaseClient) await supabaseClient.auth.signOut();
+    if (window.supabaseClient) await window.supabaseClient.auth.signOut();
     localStorage.clear();
     sessionStorage.clear();
     document.cookie.split(";").forEach((c) => {
@@ -126,9 +126,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Init User Function (Helper)
     async function getUser() {
-        if (!supabaseClient) return null;
+        if (!window.supabaseClient) return null;
         try {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+            const { data: { session } } = await window.supabaseClient.auth.getSession();
             return session ? session.user : null;
         } catch (e) { return null; }
     }

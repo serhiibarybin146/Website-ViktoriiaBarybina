@@ -74,20 +74,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Handle Form Submission (Stub)
-    form.addEventListener('submit', (e) => {
+    // 3. Handle Form Submission
+    form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const data = new FormData(form);
-        const feature = data.get('feature');
-        const name = data.get('name');
+        const submitBtn = form.querySelector('button[type="submit"]');
+        const originalText = submitBtn.textContent;
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Отправка...';
 
-        // Stub: Log or Alert
-        console.log(`[STUB] Request submitted for feature: ${feature}`);
-        console.log(`User: ${name}`);
+        const formData = new FormData(form);
+        const feature = formData.get('feature');
+        const name = formData.get('name');
+        const contact = formData.get('contact');
 
-        alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
+        try {
+            // Use existing supabaseClient (initialized in app.js)
+            if (typeof window.initSupabase === 'function') window.initSupabase();
 
-        closeModal();
+            if (window.supabaseClient) {
+                const { error } = await window.supabaseClient
+                    .from('leads')
+                    .insert([
+                        {
+                            feature: feature,
+                            full_name: name,
+                            contact_info: contact,
+                            status: 'new'
+                        }
+                    ]);
+
+                if (error) throw error;
+
+                alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
+                closeModal();
+            } else {
+                throw new Error('Supabase client not found');
+            }
+        } catch (err) {
+            console.error('Submission error:', err);
+            alert('Извините, произошла ошибка. Попробуйте еще раз или напишите в Telegram.');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = originalText;
+        }
     });
 });
