@@ -68,11 +68,8 @@ window.handleRegister = async function (event) {
             errorDiv.style.color = '#dc3545';
             errorDiv.textContent = error.message;
         }
-    } else if (data.session) {
-        // Immediate login (Email verification disabled)
-        window.location.href = '/';
     } else {
-        // Verification still enabled
+        // Show success screen for both cases (with or without session)
         if (form) {
             form.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
