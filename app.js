@@ -57,7 +57,10 @@ window.handleRegister = async function (event) {
     }
 
     const { data, error } = await supabaseClient.auth.signUp({
-        email, password, options: { data: { full_name: name } }
+        email, password, options: {
+            data: { full_name: name },
+            emailRedirectTo: 'https://viktoriiabarybina.com/login.html'
+        }
     });
 
     if (error) {
@@ -65,8 +68,11 @@ window.handleRegister = async function (event) {
             errorDiv.style.color = '#dc3545';
             errorDiv.textContent = error.message;
         }
+    } else if (data.session) {
+        // Immediate login (Email verification disabled)
+        window.location.href = '/';
     } else {
-        // SUCCESS CASE
+        // Verification still enabled
         if (form) {
             form.innerHTML = `
                 <div style="text-align: center; padding: 20px;">
@@ -136,20 +142,41 @@ document.addEventListener('DOMContentLoaded', async () => {
     async function updateHeader() {
         const user = await getUser();
         let authBtn = document.getElementById('headerAuthBtn');
+        let headerActions = document.querySelector('.header-actions');
+
+        // Hide nav logout link (user wants it in header-actions instead)
+        const navLogout = document.getElementById('navLogoutLink');
+        if (navLogout) navLogout.style.display = 'none';
 
         if (authBtn) {
             if (user) {
                 authBtn.href = '/';
                 authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
-                // Show logout in nav
-                const navLogout = document.getElementById('navLogoutLink');
-                if (navLogout) navLogout.style.display = 'block';
+
+                // Add Logout button next to Home if not already there
+                let logoutBtn = document.getElementById('headerLogoutBtn');
+                if (!logoutBtn && headerActions) {
+                    logoutBtn = document.createElement('a');
+                    logoutBtn.id = 'headerLogoutBtn';
+                    logoutBtn.href = '#';
+                    logoutBtn.className = 'action-link auth-btn-dynamic';
+                    logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon> Выйти';
+                    logoutBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        forceSignOut();
+                    });
+                    // Insert after Auth button
+                    authBtn.insertAdjacentElement('afterend', logoutBtn);
+                } else if (logoutBtn) {
+                    logoutBtn.style.display = 'inline-flex';
+                }
             } else {
                 authBtn.href = 'login.html';
                 authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
-                // Hide logout in nav
-                const navLogout = document.getElementById('navLogoutLink');
-                if (navLogout) navLogout.style.display = 'none';
+
+                // Hide logout button if exists
+                const logoutBtn = document.getElementById('headerLogoutBtn');
+                if (logoutBtn) logoutBtn.style.display = 'none';
             }
         }
     }

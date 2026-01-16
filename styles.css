@@ -751,13 +751,21 @@ img {
     opacity: 0.7;
 }
 
-/* LOGIN BUTTON BORDER Override */
-/* Uses attribute selector to target dynamic element if href matches, or general class */
-.action-link.auth-btn-dynamic[href="login.html"] {
+/* AUTH BUTTON BORDER Override */
+.action-link.auth-btn-dynamic {
     border: 1px solid currentColor;
     padding: 0.5rem 1.2rem;
     border-radius: 50px;
     margin-right: 0;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-link.auth-btn-dynamic:hover {
+    background: rgba(0, 0, 0, 0.05);
+    opacity: 1;
 }
 
 /* Adjust Hero Cards Grid Position - "Lift Up" */
