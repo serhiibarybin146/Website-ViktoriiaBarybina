@@ -5,13 +5,18 @@ const SUPABASE_ANON_KEY = 'sb_publishable_tjoFdDgs4I3zgrkHOe0FgQ_uKm4ivL3';
 window.supabaseClient = null;
 
 window.initSupabase = function () {
-    if (!window.supabaseClient && typeof window.supabase !== 'undefined') {
+    if (window.supabaseClient) return true;
+
+    if (typeof window.supabase !== 'undefined') {
         try {
             window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return true;
         } catch (err) {
             console.error("Supabase Init Error:", err);
+            return false;
         }
     }
+    return false;
 }
 
 // Global Auth Handlers (Exposed to Window)

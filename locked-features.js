@@ -92,6 +92,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Use existing supabaseClient (initialized in app.js)
             if (typeof window.initSupabase === 'function') window.initSupabase();
 
+            const libStatus = typeof window.supabase !== 'undefined' ? 'ok' : 'lib_missing';
+            const clientStatus = window.supabaseClient ? 'ok' : 'null';
+
             if (window.supabaseClient) {
                 const { error } = await window.supabaseClient
                     .from('leads')
@@ -112,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
                 closeModal();
             } else {
-                throw new Error('Supabase client not initialized. Please refresh the page.');
+                throw new Error(`Supabase connection failed (lib:${libStatus}, client:${clientStatus}). Please check your connection and refresh.`);
             }
         } catch (err) {
             console.error('Submission catch:', err);
