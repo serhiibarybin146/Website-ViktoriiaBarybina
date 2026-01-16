@@ -34,6 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // let's ensure we handle it correctly.
 
         card.addEventListener('click', (e) => {
+            // Check if card is still locked (app.js might have unlocked it)
+            if (!card.classList.contains('is-locked')) {
+                return;
+            }
+
             // EXCEPTION: If the card points to matrix.html, let app.js handle it (redirect to login)
             if (card.getAttribute('href')?.includes('matrix.html')) {
                 return;
@@ -51,6 +56,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const ctaBtn = card.querySelector('.card-cta-locked');
         if (ctaBtn) {
             ctaBtn.addEventListener('click', (e) => {
+                if (!card.classList.contains('is-locked')) {
+                    // Let the click through (to wherever the button leads now)
+                    return;
+                }
                 e.preventDefault();
                 e.stopPropagation();
                 const feature = card.getAttribute('data-feature');

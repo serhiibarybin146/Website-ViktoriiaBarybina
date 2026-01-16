@@ -233,10 +233,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             const unlockCard = () => {
                 card.classList.remove('is-locked');
                 card.classList.add('is-unlocked');
+
+                // Update front icon
                 const lockIcon = card.querySelector('.card-lock-icon');
                 if (lockIcon) {
                     lockIcon.innerHTML = '<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>';
                     lockIcon.className = 'card-arrow';
+                }
+
+                // Update back side content
+                const backContent = card.querySelector('.hero-card-back .locked-content');
+                if (backContent) {
+                    backContent.innerHTML = `
+                        <h4 class="locked-title" style="color: #4CAF50;">
+                            <iconify-icon icon="solar:check-circle-bold"></iconify-icon> Доступ открыт
+                        </h4>
+                        <p class="card-desc">Вам предоставлен полный доступ к этому разделу.</p>
+                        <button class="card-cta-locked" style="background: #4CAF50; border-color: #4CAF50;">Открыть раздел</button>
+                    `;
                 }
             };
 
