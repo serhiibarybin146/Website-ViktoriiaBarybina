@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     'compatibility': 'Узнайте потенциал ваших отношений, общие задачи и кармические связи с партнером.',
                     'year': 'Прогноз главных энергий вашего года — на что направить фокус и каких уроков ожидать.',
                     'month': 'Детальный путеводитель по энергиям каждого месяца для вашего личного развития.',
-                    'calendar': 'Персональный расчет энергий на каждый день для эффективного планирования дел.',
+                    'calendar': 'Ваш личный нумерологический прогноз на каждый день для гармоничного планирования жизни.',
                     'child': 'Поймите таланты и особенности вашего ребенка через призму его даты рождения.'
                 };
 
@@ -276,10 +276,10 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (card.classList.contains('is-unlocked')) {
                     const featureMap = {
                         'matrix': 'matrix.html',
-                        'compatibility': 'matrix.html', // Pointing to calc for now
+                        'compatibility': 'matrix.html',
                         'year': 'matrix.html',
                         'month': 'matrix.html',
-                        'calendar': 'matrix.html'
+                        'calendar': 'calendar.html'
                     };
                     const url = featureMap[featureKey];
                     if (url && url !== '#') {
