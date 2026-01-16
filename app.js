@@ -10,6 +10,7 @@ window.initSupabase = function () {
     if (typeof window.supabase !== 'undefined') {
         try {
             window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            console.log("Supabase initialized successfully");
             return true;
         } catch (err) {
             console.error("Supabase Init Error:", err);
@@ -206,11 +207,20 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Fetch specific permissions if logged in
         let permissions = [];
         if (user && window.supabaseClient) {
+            console.log("Checking permissions for user:", user.id);
             try {
-                const { data } = await window.supabaseClient
+                const { data, error } = await window.supabaseClient
                     .from('user_access')
                     .select('feature_key');
-                if (data) permissions = data.map(p => p.feature_key);
+
+                if (error) {
+                    console.error("Permission fetch error:", error);
+                }
+
+                if (data) {
+                    permissions = data.map(p => p.feature_key);
+                    console.log("Found permissions:", permissions);
+                }
             } catch (e) { console.error("Access fetch error:", e); }
         }
 
