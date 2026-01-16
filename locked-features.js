@@ -112,8 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
                     throw error;
                 }
 
-                alert('Спасибо! Ваша заявка принята. Мы свяжемся с вами в ближайшее время.');
-                closeModal();
+                // Show Success Message instead of form
+                const modalContent = document.querySelector('.modal-content');
+                if (modalContent) {
+                    modalContent.innerHTML = `
+                        <div class="success-message" style="text-align: center; padding: 20px 0;">
+                            <div class="modal-icon" style="color: #4CAF50; margin-bottom: 20px;">
+                                <iconify-icon icon="solar:check-circle-bold" style="font-size: 64px;"></iconify-icon>
+                            </div>
+                            <h3 style="margin-bottom: 10px;">Заявка принята!</h3>
+                            <p style="color: #666; font-size: 0.95rem; line-height: 1.5;">
+                                Спасибо, <strong>${name}</strong>. Мы получили ваш запрос на доступ и свяжемся с вами в ближайшее время.
+                            </p>
+                            <button class="cta-button" style="margin-top: 25px; width: 100%;" onclick="location.reload()">Понятно</button>
+                        </div>
+                    `;
+                }
             } else {
                 throw new Error(`Supabase connection failed (lib:${libStatus}, client:${clientStatus}). Please check your connection and refresh.`);
             }

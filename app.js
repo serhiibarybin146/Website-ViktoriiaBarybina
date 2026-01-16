@@ -203,11 +203,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         const user = await getUser();
         const cards = document.querySelectorAll('.hero-card');
 
+        // Fetch specific permissions if logged in
+        let permissions = [];
+        if (user && window.supabaseClient) {
+            try {
+                const { data } = await window.supabaseClient
+                    .from('user_access')
+                    .select('feature_key');
+                if (data) permissions = data.map(p => p.feature_key);
+            } catch (e) { console.error("Access fetch error:", e); }
+        }
+
         cards.forEach(card => {
             const href = card.getAttribute('href');
-            const isMatrix = href?.includes('matrix.html') || href === 'matrix';
+            const featureKey = card.getAttribute('data-feature');
+            const isBaseMatrix = href?.includes('matrix.html') || href === 'matrix';
 
-            if (user && isMatrix) {
+            // Function to reveal the card
+            const unlockCard = () => {
                 card.classList.remove('is-locked');
                 card.classList.add('is-unlocked');
                 const lockIcon = card.querySelector('.card-lock-icon');
@@ -215,13 +228,21 @@ document.addEventListener('DOMContentLoaded', async () => {
                     lockIcon.innerHTML = '<iconify-icon icon="solar:arrow-right-linear"></iconify-icon>';
                     lockIcon.className = 'card-arrow';
                 }
+            };
+
+            // Logic: Unlock if it's the base matrix OR if user has explicit permission
+            if (user) {
+                if (isBaseMatrix || permissions.includes(featureKey)) {
+                    unlockCard();
+                }
             }
 
             card.addEventListener('click', (e) => {
-                if (!user && isMatrix) {
+                if (!user && isBaseMatrix) {
                     e.preventDefault();
                     window.location.href = 'login.html';
                 }
+                // Locked cards (non-matrix) are handled by locked-features.js
             });
         });
     }
