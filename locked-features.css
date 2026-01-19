@@ -17,11 +17,11 @@
 /* Lock Icon on Front */
 .card-lock-icon {
     position: absolute;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    font-size: 1.5rem;
+    bottom: 1rem;
+    right: 1rem;
+    font-size: 1.25rem;
     color: var(--text-color, #1A1A1A);
-    opacity: 0.7;
+    opacity: 0.6;
     display: flex;
     align-items: center;
     justify-content: center;
