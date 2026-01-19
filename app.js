@@ -105,7 +105,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         toggle.addEventListener('click', () => {
             const active = nav.classList.toggle('active');
             toggle.setAttribute('aria-expanded', active);
-            nav.style.display = active ? 'block' : '';
+            // On mobile, the CSS will handle visibility via .active class
+        });
+
+        // Close menu when a link is clicked
+        nav.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+                toggle.setAttribute('aria-expanded', 'false');
+            });
         });
     }
 
@@ -138,40 +146,54 @@ document.addEventListener('DOMContentLoaded', async () => {
         const user = await getUser();
         let authBtn = document.getElementById('headerAuthBtn');
         let headerActions = document.querySelector('.header-actions');
-
-        // Hide nav logout link (user wants it in header-actions instead)
-        const navLogout = document.getElementById('navLogoutLink');
-        if (navLogout) navLogout.style.display = 'none';
+        let mobileNavList = document.querySelector('.main-nav .nav-list');
 
         if (authBtn) {
             if (user) {
                 authBtn.href = '/';
                 authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
-                // Add Logout button next to Home if not already there
+                // Ensure Exit link is in the mobile nav list if not present
+                let mobileExit = document.getElementById('mobileExitLink');
+                if (!mobileExit && mobileNavList) {
+                    const li = document.createElement('li');
+                    li.id = 'mobileExitLi';
+                    mobileExit = document.createElement('a');
+                    mobileExit.id = 'mobileExitLink';
+                    mobileExit.href = '#';
+                    mobileExit.className = 'nav-link';
+                    mobileExit.innerHTML = 'Выйти';
+                    mobileExit.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        forceSignOut();
+                    });
+                    li.appendChild(mobileExit);
+                    mobileNavList.appendChild(li);
+                }
+
+                // Add Logout button next to Home (for semi-desktop/tablet)
                 let logoutBtn = document.getElementById('headerLogoutBtn');
                 if (!logoutBtn && headerActions) {
                     logoutBtn = document.createElement('a');
                     logoutBtn.id = 'headerLogoutBtn';
                     logoutBtn.href = '#';
-                    logoutBtn.className = 'action-link auth-btn-dynamic';
+                    logoutBtn.className = 'action-link auth-btn-dynamic desktop-only'; // Hide on mobile since it's in hamburger
                     logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon> Выйти';
                     logoutBtn.addEventListener('click', (e) => {
                         e.preventDefault();
                         forceSignOut();
                     });
-                    // Insert after Auth button
                     authBtn.insertAdjacentElement('afterend', logoutBtn);
-                } else if (logoutBtn) {
-                    logoutBtn.style.display = 'inline-flex';
                 }
             } else {
                 authBtn.href = 'login.html';
                 authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
 
-                // Hide logout button if exists
+                const mobileExitLi = document.getElementById('mobileExitLi');
+                if (mobileExitLi) mobileExitLi.remove();
+
                 const logoutBtn = document.getElementById('headerLogoutBtn');
-                if (logoutBtn) logoutBtn.style.display = 'none';
+                if (logoutBtn) logoutBtn.remove();
             }
         }
     }
