@@ -1002,10 +1002,15 @@ img {
         font-size: 1.1rem !important;
         margin-bottom: 0 !important;
         font-weight: 600 !important;
+        display: inline-block !important;
     }
 
     .age-display {
-        display: none !important;
+        display: inline-block !important;
+        font-size: 0.95rem !important;
+        color: var(--text-muted) !important;
+        margin-left: 0.5rem !important;
+        font-weight: 400 !important;
     }
 
     .matrix-sidebar-left .btn-primary {
