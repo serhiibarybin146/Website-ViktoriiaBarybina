@@ -763,6 +763,194 @@ img {
     gap: 0.5rem;
 }
 
+/* =========================================
+   MOBILE ADAPTATION (max-width: 1023px)
+   ========================================= */
+@media (max-width: 1023px) {
+    :root {
+        --container-padding: 1.25rem;
+        --header-height: 70px;
+    }
+
+    /* --- Header Mobile --- */
+    .site-header {
+        background: rgba(234, 230, 222, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .logo {
+        font-size: 1.35rem;
+    }
+
+    .brand-name {
+        font-weight: 700;
+    }
+
+    .header-actions {
+        gap: 0.5rem;
+    }
+
+    .auth-btn-dynamic {
+        padding: 0.4rem 0.8rem !important;
+        font-size: 0.85rem !important;
+    }
+
+    .nav-list {
+        gap: 1rem;
+    }
+
+    /* --- Hero Section Mobile --- */
+    .hero {
+        padding-top: calc(var(--header-height) + 1rem);
+        min-height: auto;
+    }
+
+    .hero-grid {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem var(--container-padding);
+        gap: 1.5rem;
+    }
+
+    .hero-headline {
+        font-size: 2.5rem;
+        margin-top: 1rem;
+        text-align: left;
+        max-width: 100%;
+    }
+
+    /* --- Hero Cards Mobile: Rectangular Bars --- */
+    .hero-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin-top: 1rem;
+        width: 100%;
+        max-width: 100% !important;
+    }
+
+    .hero-card {
+        min-height: 60px !important;
+        height: auto !important;
+        perspective: none;
+        cursor: pointer;
+    }
+
+    .hero-card-inner {
+        transform: none !important;
+        transition: none !important;
+        transform-style: flat;
+        height: auto !important;
+    }
+
+    .hero-card-face {
+        position: relative !important;
+        width: 100% !important;
+        height: 100% !important;
+        padding: 1.25rem !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        backface-visibility: visible !important;
+        transform: none !important;
+        border-radius: 16px !important;
+    }
+
+    .hero-card-back {
+        display: none !important;
+    }
+
+    .hero-card-front {
+        background: #fff !important;
+        border: 1px solid rgba(0, 0, 0, 0.05) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .card-label {
+        font-size: 1rem !important;
+        font-weight: 500 !important;
+        text-align: left;
+    }
+
+    .card-arrow,
+    .card-lock-icon {
+        position: static !important;
+        font-size: 1.2rem !important;
+        opacity: 0.6 !important;
+        margin-left: auto;
+        display: flex !important;
+        align-items: center;
+    }
+
+    /* --- Visual Image Mobile --- */
+    .hero-visual {
+        margin-top: 1rem;
+        justify-content: center;
+        width: 100%;
+        position: relative !important;
+        right: auto !important;
+        left: auto !important;
+        height: auto !important;
+    }
+
+    .hero-img {
+        max-width: 100%;
+        height: auto !important;
+        border-radius: 12px;
+    }
+
+    /* --- Matrix Result Page Mobile --- */
+    .matrix-page-layout {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 2rem;
+    }
+
+    .matrix-chart-wrapper {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .matrix-sidebar-left,
+    .matrix-sidebar-right {
+        width: 100%;
+        order: 2;
+    }
+
+    .matrix-center-col {
+        order: 1;
+    }
+
+    .info-card {
+        padding: 1.25rem;
+    }
+
+    /* --- Footer Mobile --- */
+    .site-footer {
+        position: relative;
+        height: auto;
+        padding: 2.5rem var(--container-padding);
+        background: var(--bg-color);
+        pointer-events: auto;
+    }
+
+    .footer-inner {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+    }
+}
+
+/* Fix for overlapping header on matrix page */
+.matrix-result-page .site-header {
+    background: rgba(234, 230, 222, 0.98);
+}
+
 .action-link.auth-btn-dynamic:hover {
     background: rgba(0, 0, 0, 0.05);
     opacity: 1;
