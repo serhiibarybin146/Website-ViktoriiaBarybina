@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ваша Матрица - Viktoriia Barybina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <script>
+        // HEADER GUARD: Immediate Security Check
+        (function () {
+            var hasSession = false;
+            for (var key in localStorage) {
+                if (key.startsWith('sb-') && key.endsWith('-auth-token')) {
+                    hasSession = true;
+                    break;
+                }
+            }
+            if (!hasSession && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+                window.location.href = 'login.html';
+            }
+        })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+        <div class="header-inner container">
+            <a href="/" class="logo" aria-label="Viktoriia Barybina Home">
+                <div class="logo-text">
+                    <span class="brand-name">Viktoriia</span>
+                    <span class="brand-suffix">Barybina</span>
+                </div>
+            </a>
+            <nav class="main-nav" id="mainNav" aria-label="Primary">
+                <ul class="nav-list">
+                    <li><a href="services.html" class="nav-link">Услуги</a></li>
+                    <li><a href="about.html" class="nav-link">Обо мне</a></li>
+                </ul>
+            </nav>
+            <div class="header-actions">
+                <a href="login.html" class="action-link auth-btn-dynamic" id="headerAuthBtn">
+                    <iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти
+                </a>
+                <button class="mobile-toggle" aria-label="Toggle menu" aria-controls="mainNav" aria-expanded="false">
+                    <iconify-icon icon="solar:hamburger-menu-linear"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+        <!-- ===== HERO SECTION (Reused as Background/Container) ===== -->
+        <section class="hero" style="min-height: auto; padding-bottom: 4rem;">
+
+            <!-- Matrix Page Grid Layout -->
+            <div class="matrix-page-layout">
+
+                <!-- LEFT COLUMN: Date & Controls -->
+                <aside class="matrix-sidebar-left">
+                    <div class="premium-card date-card">
+                        <div class="date-card-content">
+                            <div id="birthdate-label">
+                                <!-- JS Injected: <div class="date-display">...</div> <div class="age-display">...</div> -->
+                            </div>
+                            <a href="matrix.html" class="btn-primary" style="margin-top: 0.5rem;">Рассчитать другую
+                                дату</a>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- CENTER COLUMN: Matrix Chart -->
+                <div class="matrix-center-col">
+                    <div class="matrix-chart-wrapper"
+                        style="width: 100%; position: relative; display: flex; justify-content: center; align-items: center;">
+                        <!-- SVG Filter -->
+                        <svg width="0" height="0" style="position: absolute; visibility: hidden;">
+                            <defs>
+                                <filter id="dropShadow" x="-20%" y="-20%" width="140%" height="140%">
+                                    <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+                                    <feOffset dx="2" dy="4" result="offsetblur" />
+                                    <feComponentTransfer>
+                                        <feFuncA type="linear" slope="0.2" />
+                                    </feComponentTransfer>
+                                    <feMerge>
+                                        <feMergeNode />
+                                        <feMergeNode in="SourceGraphic" />
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                        </svg>
+
+                        <!-- Main SVG -->
+                        <svg id="svg" viewBox="0 0 700 700"
+                            style="width: 100%; height: auto; filter: drop-shadow(0px 10px 30px rgba(0,0,0,0.05)); overflow: visible;"></svg>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: Stats & Tables -->
+                <aside class="matrix-sidebar-right">
+
+                    <!-- Health Table -->
+                    <div class="premium-card" style="padding: 1.5rem;">
+                        <h3 class="health-title">Таблица Здоровья</h3>
+                        <div class="health-table-wrapper">
+                            <table class="health-table">
+                                <colgroup>
+                                    <col style="width: 18%">
+                                    <col style="width: 18%">
+                                    <col style="width: 18%">
+                                    <col style="width: 46%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>Тело</th>
+                                        <th>Энергия</th>
+                                        <th>Эмоция</th>
+                                        <th>Чакра</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="row-purple">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Сахасрара
+                                            <div class="chakra-tooltip tooltip-purple">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">духовность,
+                                                        соединение с Высшим Я, осознание, просветление.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">верхняя часть головного мозга, шишковидная
+                                                        железа, центральная нервная система (депрессия, потеря смысла
+                                                        жизни, циклы сна).</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-blue">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Аджна
+                                            <div class="chakra-tooltip tooltip-blue">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">интуиция, мудрость,
+                                                        способность видеть за пределы очевидного (Большую картину),
+                                                        интуитивное и более глубокое понимания мира.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">глаза, носовые пазухи, лоб, виски, затылок,
+                                                        головной мозг, нервная система, эндокринная система.</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-cyan">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Вишудха
+                                            <div class="chakra-tooltip tooltip-cyan">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">коммуникация,
+                                                        самовыражение, творческое искусство через речь и пение,
+                                                        способность слушать и быть услышанным.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">горло, руки, голосовые связки, щитовидная
+                                                        железа, трахея, уши, рот (включая зубы и десны), шея, гортань,
+                                                        глотка, челюсти, голосовой аппарат, плечевой пояс.</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-green">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Анахата
+                                            <div class="chakra-tooltip tooltip-green">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">любовь,
+                                                        сострадание, принятие, гармония, способность к эмпатии и
+                                                        прощению, душа, эмоциональные травмы.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">сердце, легкие, бронхи, ребра, диафрагма,
+                                                        грудная клетка, тимус (вилочковая железа).</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-yellow">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Манипура
+                                            <div class="chakra-tooltip tooltip-yellow">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">статус, достижения,
+                                                        уверенность, способность к контролю и управлению в своей жизни,
+                                                        целеустремленность.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">пищеварительная система (желудок, печень,
+                                                        желчный пузырь, поджелудочная железа, селезенка, верхняя часть
+                                                        тонкого кишечника, толстый кишечник), надпочечники, обмен
+                                                        веществ.</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-orange">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Свадхистана
+                                            <div class="chakra-tooltip tooltip-orange">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">эмоции,
+                                                        сексуальность, творчество, детство, удовольствие от жизни,
+                                                        границы и уважение с партнером.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">половые органы, яичники у женщин и яички у
+                                                        мужчин, матка, влагалище, шейка матки, простата, репродуктивная
+                                                        система, мочевая система, почки, мочевой пузырь, толстый
+                                                        кишечник.</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-red">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">
+                                            Муладхара
+                                            <div class="chakra-tooltip tooltip-red">
+                                                <div class="tooltip-card">
+                                                    <div class="ct-title">Аспекты:</div>
+                                                    <div class="ct-text" style="margin-bottom: 6px;">безопасность,
+                                                        базовые потребности, финансовая стабильность.</div>
+                                                    <div class="ct-title">Органы:</div>
+                                                    <div class="ct-text">копчик, кости/скелет, ноги, стопы, зубы, ногти,
+                                                        мочевой пузырь, нижняя часть кишечника, прямая кишка, анус,
+                                                        клетки крови, иммунная система, кожа.</div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="row-sum">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">Сумма</td>
+                                    </tr>
+                                    <tr class="row-total">
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td>0</td>
+                                        <td class="cell-name">Итого</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Destiny Block (Prednaznacheniya) -->
+                    <div class="premium-card destiny-card">
+                        <h3 class="health-title destiny-title">Предназначения</h3>
+
+                        <div class="destiny-grid">
+                            <!-- Personal -->
+                            <div class="destiny-cell">
+                                <div class="destiny-subtitle">Личное</div>
+                                <div class="destiny-group">
+                                    <div class="destiny-values">
+                                        <div class="d-row">Небо <span class="d-val" id="val-sky">0</span></div>
+                                        <div class="d-row">Земля <span class="d-val" id="val-earth">0</span></div>
+                                    </div>
+                                    <div class="brace-wrapper">
+                                        <span class="brace-symbol">}</span>
+                                        <span class="d-val big-circle" id="val-personal-total">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Social -->
+                            <div class="destiny-cell">
+                                <div class="destiny-subtitle">Социальное</div>
+                                <div class="destiny-group">
+                                    <div class="destiny-values">
+                                        <div class="d-row">М <span class="d-val" id="val-male">0</span></div>
+                                        <div class="d-row">Ж <span class="d-val" id="val-female">0</span></div>
+                                    </div>
+                                    <div class="brace-wrapper">
+                                        <span class="brace-symbol">}</span>
+                                        <span class="d-val big-circle" id="val-social-total">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Spiritual -->
+                            <div class="destiny-cell">
+                                <div class="destiny-subtitle">Духовное</div>
+                                <span class="d-val big-circle" id="val-spiritual">0</span>
+                            </div>
+
+                            <!-- Planetary -->
+                            <div class="destiny-cell">
+                                <div class="destiny-subtitle">Планетарное</div>
+                                <span class="d-val big-circle" id="val-planetary">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generic Stats Block -->
+                    <div class="premium-card" style="padding: 1.5rem;">
+                        <div class="stats-list">
+                            <div class="stat-item">
+                                <span class="stat-label">Троичный код муж. рода</span>
+                                <span class="stat-value" id="val-male-code">0, 0, 0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Троичный код жен. рода</span>
+                                <span class="stat-value" id="val-female-code">0, 0, 0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Родовая сила</span>
+                                <span class="stat-value" id="val-ancestral-power">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Код внутренней силы</span>
+                                <span class="stat-value" id="val-internal-code">0, 0, 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </aside>
+
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-inner container">
+            <span class="footer-brand">Numerolog Viktoriia Barybina</span>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/numerology_with_vika/" class="social-link" target="_blank"
+                    rel="noopener noreferrer" aria-label="Instagram">
+                    <iconify-icon icon="solar:camera-linear"></iconify-icon>
+                </a>
+                <a href="https://t.me/+Grjsp70ErgFhYWUy" class="social-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="Telegram">
+                    <iconify-icon icon="solar:plain-linear"></iconify-icon>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+    <script src="matrix.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Viktoriia Barybina - Матрица Судьбы</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="locked-features.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1A1A1A">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+        <div class="header-inner container">
+            <a href="/" class="logo" aria-label="Viktoriia Barybina Home">
+                <div class="logo-text">
+                    <span class="brand-name">Viktoriia</span>
+                    <span class="brand-suffix">Barybina</span>
+                </div>
+            </a>
+
+            <nav class="main-nav" id="mainNav" aria-label="Primary">
+                <ul class="nav-list">
+                    <li><a href="services.html" class="nav-link">Услуги</a></li>
+                    <li><a href="about.html" class="nav-link">Обо мне</a></li>
+                    <li><a href="#" class="nav-link" id="navLogoutLink" style="display:none;"
+                            onclick="forceSignOut(); return false;">Выйти</a></li>
+                </ul>
+            </nav>
+
+            <div class="header-actions">
+                <a href="login.html" class="action-link auth-btn-dynamic" id="headerAuthBtn">
+                    <iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти
+                </a>
+                <button class="mobile-toggle" aria-label="Toggle menu" aria-controls="mainNav" aria-expanded="false">
+                    <iconify-icon icon="solar:hamburger-menu-linear"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+        <!-- ===== HERO SECTION ===== -->
+        <section class="hero">
+            <div class="hero-grid container">
+                <!-- Text Content -->
+                <div class="hero-content">
+                    <h1 class="hero-headline">
+                        КАЛЬКУЛЯТОР <br>
+                        МАТРИЦА СУДЬБЫ
+                    </h1>
+                </div>
+
+                <!-- Cards Container -->
+                <div class="hero-cards">
+                    <!-- Card 1 (Matrix Link) - UNLOCKED -->
+                    <a href="matrix.html" class="hero-card is-locked" style="background: rgba(255, 255, 255, 0.4);">
+                        <div class="hero-card-inner">
+                            <div class="hero-card-face hero-card-front">
+                                <span class="card-label">Основная матрица</span>
+                                <div class="card-lock-icon"><iconify-icon
+                                        icon="solar:lock-keyhole-minimalistic-linear"></iconify-icon></div>
+                            </div>
+                            <div class="hero-card-face hero-card-back">
+                                <p class="card-desc">Рассчитайте свою персональную карту судьбы по дате рождения.</p>
+                                <div class="card-footer">
+                                    <span class="card-cta">Рассчитать</span>
+                                    <iconify-icon icon="solar:arrow-right-linear"></iconify-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+
+                    <!-- Card 2 - LOCKED -->
+                    <div class="hero-card is-locked" data-feature="compatibility">
+                        <div class="hero-card-inner">
+                            <div class="hero-card-face hero-card-front glass-card--dark">
+                                <span class="card-label">Матрица совместимости</span>
+                                <div class="card-lock-icon"><iconify-icon
+                                        icon="solar:lock-keyhole-minimalistic-linear"></iconify-icon></div>
+                            </div>
+                            <div class="hero-card-face hero-card-back">
+                                <div class="locked-content">
+                                    <h4 class="locked-title"><iconify-icon
+                                            icon="solar:lock-keyhole-minimalistic-bold"></iconify-icon> Доступ по заявке
+                                    </h4>
+                                    <p class="card-desc">Оставьте заявку — откроем доступ.</p>
+                                    <button class="card-cta-locked">Оставить заявку</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 - LOCKED -->
+                    <div class="hero-card is-locked" data-feature="year">
+                        <div class="hero-card-inner">
+                            <div class="hero-card-face hero-card-front">
+                                <span class="card-label">Матрица на год</span>
+                                <div class="card-lock-icon"><iconify-icon
+                                        icon="solar:lock-keyhole-minimalistic-linear"></iconify-icon></div>
+                            </div>
+                            <div class="hero-card-face hero-card-back">
+                                <div class="locked-content">
+                                    <h4 class="locked-title"><iconify-icon
+                                            icon="solar:lock-keyhole-minimalistic-bold"></iconify-icon> Доступ по заявке
+                                    </h4>
+                                    <p class="card-desc">Оставьте заявку — откроем доступ.</p>
+                                    <button class="card-cta-locked">Оставить заявку</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 - LOCKED -->
+                    <div class="hero-card is-locked" data-feature="month">
+                        <div class="hero-card-inner">
+                            <div class="hero-card-face hero-card-front">
+                                <span class="card-label">Матрица на месяц</span>
+                                <div class="card-lock-icon"><iconify-icon
+                                        icon="solar:lock-keyhole-minimalistic-linear"></iconify-icon></div>
+                            </div>
+                            <div class="hero-card-face hero-card-back">
+                                <div class="locked-content">
+                                    <h4 class="locked-title"><iconify-icon
+                                            icon="solar:lock-keyhole-minimalistic-bold"></iconify-icon> Доступ по заявке
+                                    </h4>
+                                    <p class="card-desc">Оставьте заявку — откроем доступ.</p>
+                                    <button class="card-cta-locked">Оставить заявку</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card 5 - LOCKED -->
+                    <div class="hero-card is-locked" data-feature="calendar">
+                        <div class="hero-card-inner">
+                            <div class="hero-card-face hero-card-front">
+                                <span class="card-label">Личный нумерологический календарь</span>
+                                <div class="card-lock-icon"><iconify-icon
+                                        icon="solar:lock-keyhole-minimalistic-linear"></iconify-icon></div>
+                            </div>
+                            <div class="hero-card-face hero-card-back">
+                                <div class="locked-content">
+                                    <h4 class="locked-title"><iconify-icon
+                                            icon="solar:lock-keyhole-minimalistic-bold"></iconify-icon> Доступ по заявке
+                                    </h4>
+                                    <p class="card-desc">Оставьте заявку — откроем доступ.</p>
+                                    <button class="card-cta-locked">Оставить заявку</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Visual -->
+                <div class="hero-visual">
+                    <div class="image-wrapper">
+                        <img src="assets/hero-image.webp" alt="Viktoriia Barybina - Numerologist" class="hero-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer">
+        <div class="footer-inner container">
+            <span class="footer-brand">Numerolog Viktoriia Barybina</span>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/numerology_with_vika/" class="social-link" target="_blank"
+                    rel="noopener noreferrer" aria-label="Instagram">
+                    <iconify-icon icon="solar:camera-linear"></iconify-icon>
+                </a>
+                <a href="https://t.me/+Grjsp70ErgFhYWUy" class="social-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="Telegram">
+                    <iconify-icon icon="solar:plain-linear"></iconify-icon>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ===== LOCKED FEATURE MODAL ===== -->
+    <div class="modal-overlay" id="lockedModal" aria-hidden="true">
+        <div class="modal-container">
+            <button class="modal-close" aria-label="Close modal">
+                <iconify-icon icon="solar:close-circle-linear"></iconify-icon>
+            </button>
+            <div class="modal-content">
+                <div class="modal-icon">
+                    <iconify-icon icon="solar:lock-keyhole-minimalistic-bold"></iconify-icon>
+                </div>
+                <h3>Доступ ограничен</h3>
+                <p>Этот раздел доступен по индивидуальной заявке. Оставьте свои контакты, и мы свяжемся с вами для
+                    открытия доступа.</p>
+
+                <form class="locked-request-form" id="requestForm">
+                    <input type="hidden" name="feature" id="featureInput">
+
+                    <div class="form-group">
+                        <label for="reqName">Ваше имя</label>
+                        <input type="text" id="reqName" name="name" placeholder="Как к вам обращаться?" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="reqEmail">Email</label>
+                        <input type="text" id="reqEmail" name="contact" placeholder="contact@example.com" required>
+                    </div>
+
+                    <button type="submit" class="cta-button">Отправить заявку</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script src="locked-features.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,2131 @@
+:root {
+    /* Colors */
+    --bg-color: #EAE6DE;
+    --text-main: #1A1A1A;
+    --text-muted: #555555;
+    --glass-bg: rgba(234, 230, 222, 0.4);
+    --glass-border: rgba(255, 255, 255, 0.4);
+    --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+
+    /* Spacing */
+    --container-padding: 2rem;
+    --header-height: 80px;
+
+    /* Typography */
+    --font-main: 'Manrope', sans-serif;
+    --font-ui: 'Inter', sans-serif;
+    --font-calendar: 'DM Sans', sans-serif;
+
+    /* Chakra Colors (Vibrant) */
+    --chakra-purple-bg: #9b5DE5;
+    --chakra-blue-bg: #2d6cdf;
+    --chakra-cyan-bg: #4cc9f0;
+    --chakra-green-bg: #aacc00;
+    --chakra-yellow-bg: #ffbd00;
+    --chakra-orange-bg: #fb8500;
+    --chakra-red-bg: #f94144;
+    --accent-main: #cc3366;
+
+    /* Calendar Specific */
+    --cal-pill-green: #E8F5E9;
+    --cal-pill-green-text: #2E7D32;
+    --cal-pill-blue: #E3F2FD;
+    --cal-pill-blue-text: #1565C0;
+    --cal-pill-yellow: #FFF9C4;
+    --cal-pill-yellow-text: #F9A825;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: opacity 0.2s ease;
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* Header */
+.site-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--container-padding);
+    z-index: 100;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border-color 0.3s ease;
+}
+
+.site-header:hover,
+.site-header:focus-within {
+    background-color: rgba(234, 230, 222, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+.header-inner {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-weight: 700;
+    font-size: 1.65rem;
+    /* Larger as requested */
+    letter-spacing: -0.015em;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: translateY(-1px);
+}
+
+.logo-text {
+    display: flex;
+    align-items: center;
+    line-height: 1;
+}
+
+.brand-name {
+    color: var(--text-main);
+}
+
+.brand-suffix {
+    color: var(--text-main);
+    margin-left: 0.4rem;
+}
+
+.footer-brand {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+/* Nav */
+.desktop-nav {
+    display: none;
+    /* Mobile first */
+}
+
+.nav-list {
+    display: flex;
+    gap: 2rem;
+}
+
+.nav-link {
+    font-family: var(--font-ui);
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--text-main);
+}
+
+.nav-link:hover {
+    opacity: 0.7;
+}
+
+.nav-link:focus-visible,
+.action-link:focus-visible,
+.icon-btn:focus-visible,
+.glass-card:focus-visible {
+    outline: 2px solid var(--text-main);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.action-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    font-family: var(--font-ui);
+    margin-right: 1rem;
+}
+
+.icon-btn {
+    background: transparent;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-main);
+    transition: all 0.2s;
+}
+
+.icon-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+.mobile-toggle {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* Hero Section */
+.hero {
+    min-height: 100vh;
+    padding-top: var(--header-height);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    /* For large images */
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr;
+    min-height: 100%;
+    padding: 2rem var(--container-padding);
+    gap: 2rem;
+}
+
+.hero-headline {
+    font-size: clamp(2.5rem, 5vw, 5rem);
+    font-weight: 300;
+    /* Thin/Light appearance */
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--text-main);
+    max-width: 20ch;
+    margin-top: 2rem;
+}
+
+/* Cards */
+/* 3D Flip Cards */
+.hero-card {
+    background-color: transparent;
+    perspective: 1000px;
+    cursor: pointer;
+    min-height: 220px;
+    /* Ensure good size */
+    outline: none;
+    border-radius: 20px;
+    /* Match inner radius for focus outline */
+}
+
+.hero-card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform-style: preserve-3d;
+    border-radius: 20px;
+}
+
+/* Flip Trigger */
+.hero-card:hover .hero-card-inner,
+.hero-card:focus-within .hero-card-inner {
+    transform: rotateY(180deg);
+}
+
+.hero-card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    border-radius: 20px;
+    padding: 1.5rem;
+    /* Slightly smaller padding for denser content */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+}
+
+/* Front Face (Glass) */
+.hero-card-front {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0.15));
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    align-items: flex-start;
+    justify-content: flex-end;
+    /* Label at bottom */
+}
+
+.hero-card-front.glass-card--dark {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4));
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Back Face (Opaque/Solid) */
+.hero-card-back {
+    background-color: #F8F6F2;
+    /* Slightly lighter/cleaner than bg */
+    color: var(--text-main);
+    transform: rotateY(180deg);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    justify-content: space-between;
+}
+
+/* Content Styling */
+.card-label {
+    font-size: 1.25rem;
+    font-weight: 500;
+}
+
+.card-arrow {
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.card-desc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+
+.card-footer {
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+/* Accessibility & Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    .hero-card-inner {
+        transition: none;
+    }
+
+    .hero-card:hover .hero-card-inner,
+    .hero-card:focus-within .hero-card-inner {
+        transform: none;
+    }
+
+    .hero-card-back {
+        opacity: 0;
+        transition: opacity 0.3s;
+        transform: none;
+        /* No rotation */
+        z-index: 2;
+        background-color: #F8F6F2;
+    }
+
+    .hero-card:hover .hero-card-back,
+    .hero-card:focus-within .hero-card-back {
+        opacity: 1;
+    }
+}
+
+.hero-card:focus-visible {
+    outline: 2px solid var(--text-main);
+    outline-offset: 4px;
+}
+
+/* Visual */
+.hero-visual {
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.hero-img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Responsive */
+@media (min-width: 1024px) {
+    .mobile-toggle {
+        display: none;
+    }
+
+    .desktop-only {
+        display: flex;
+    }
+
+    .main-nav {
+        display: block;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .nav-list {
+        flex-direction: row;
+    }
+
+    .header-inner {
+        position: relative;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1.2fr 1fr;
+        /* Text heavy left, Image right */
+        grid-template-rows: 1fr auto;
+        padding-bottom: 4rem;
+        height: calc(100vh - var(--header-height));
+    }
+
+    .hero-content {
+        grid-column: 1 / 3;
+        grid-row: 1;
+        z-index: 10;
+    }
+
+    .hero-visual {
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+        position: absolute;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+        margin-right: -2rem;
+        /* Bleed to edge */
+    }
+
+    .hero-img {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    /* Hero Cards Grid Override */
+    .hero-cards {
+        grid-column: 1 / 3;
+        /* Spans full width */
+        grid-row: 2;
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        /* 5 cols for all cards on large screens */
+        gap: 1.5rem;
+        z-index: 10;
+        width: 100%;
+        max-width: 1200px;
+        /* Balanced width for 5 cards */
+        margin-inline: auto;
+        /* Center the grid */
+        margin-top: -3rem;
+        /* Overlap visual slightly if needed, or keep flush */
+    }
+
+    /* Adjust columns for tablet and smaller desktop */
+    @media (max-width: 1400px) {
+        .hero-cards {
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 900px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .hero-cards {
+            grid-template-columns: repeat(2, 1fr);
+            max-width: 600px;
+        }
+    }
+}
+
+/* --- Auth & Prototype Styles --- */
+
+/* Utility for One-Screen Layout on Desktop */
+@media (min-width: 1024px) {
+    .screen-container {
+        height: calc(100vh - var(--header-height));
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+        /* Prevent body scroll */
+    }
+
+    .scrollable-content {
+        overflow-y: auto;
+        max-height: 100%;
+        padding-right: 0.5rem;
+        /* space for scrollbar */
+    }
+
+    /* Custom Refresh Scrollbar */
+    .scrollable-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .scrollable-content::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .scrollable-content::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.2);
+        border-radius: 10px;
+    }
+}
+
+/* Auth Forms (Login/Register) */
+.auth-section {
+    min-height: calc(100vh - var(--header-height));
+    padding-top: var(--header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2rem;
+}
+
+.auth-container {
+    background: #ffffff;
+    /* Solid white as per user request/image */
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Very subtle border or none */
+    padding: 3rem;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+    /* Soft shadow */
+    text-align: center;
+}
+
+.auth-title {
+    font-size: 2rem;
+    font-weight: 300;
+    margin-bottom: 2rem;
+    color: var(--text-main);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-group {
+    text-align: left;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.form-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    font-family: var(--font-ui);
+    font-size: 1rem;
+    transition: all 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--text-main);
+    background: #fff;
+}
+
+.btn-primary {
+    padding: 1rem;
+    background: var(--text-main);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.auth-switch {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.auth-link {
+    color: var(--text-main);
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* Dashboard Styles */
+.dashboard-head {
+    margin-bottom: 3rem;
+}
+
+.dashboard-title {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+}
+
+.dashboard-subtitle {
+    color: var(--text-muted);
+    font-size: 1.2rem;
+}
+
+/* Products Grid */
+.products-section {
+    padding-top: var(--header-height);
+    min-height: 100vh;
+}
+
+.products-wrapper {
+    padding: 2rem var(--container-padding);
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+.products-header {
+    margin-bottom: 2rem;
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+/* Dummy Product Card */
+.product-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+}
+
+.product-img {
+    height: 200px;
+    background: #e0e0e0;
+    /* Placeholder color */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.product-info {
+    padding: 1.5rem;
+}
+
+.product-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.product-price {
+    font-size: 1rem;
+    color: var(--text-muted);
+}
+
+/* --- Footer --- */
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    height: var(--header-height);
+    display: flex;
+    align-items: center;
+    padding: 0 var(--container-padding);
+    background: transparent;
+    pointer-events: none;
+}
+
+.site-footer * {
+    pointer-events: auto;
+}
+
+.footer-inner {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* Centering */
+    gap: 2rem;
+    /* Spacing */
+    align-items: center;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background: transparent;
+    flex-wrap: wrap;
+    /* Safe wrapping */
+}
+
+@media (max-width: 1024px) {
+    .site-footer {
+        position: relative;
+        height: auto;
+        padding-top: 2rem;
+        background: var(--bg-color);
+        pointer-events: auto;
+    }
+}
+
+.footer-brand {
+    font-family: var(--font-ui);
+    font-weight: 500;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 1rem;
+}
+
+.social-link {
+    font-size: 1.5rem;
+    color: var(--text-main);
+    transition: opacity 0.2s;
+}
+
+.social-link:hover {
+    opacity: 0.7;
+}
+
+/* AUTH BUTTON BORDER Override */
+.action-link.auth-btn-dynamic {
+    border: 1px solid currentColor;
+    padding: 0.5rem 1.2rem;
+    border-radius: 50px;
+    margin-right: 0;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.action-link.auth-btn-dynamic:hover {
+    background: rgba(0, 0, 0, 0.05);
+    opacity: 1;
+}
+
+/* Adjust Hero Cards Grid Position - "Lift Up" */
+@media (min-width: 1024px) {
+    .hero-grid {
+        grid-template-rows: 0.5fr auto;
+    }
+
+    .hero-cards {
+        align-self: start;
+        margin-top: -6vh;
+    }
+}
+
+/* --- Matrix Result Page --- */
+.info-card {
+    background: white;
+    padding: 1.5rem;
+    /* ~24px */
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#birthdate-label {
+    margin-bottom: 1rem;
+    /* 16px */
+    color: var(--text-main);
+    line-height: 1.3;
+}
+
+.info-card .btn-primary {
+    text-decoration: none;
+    padding: 0.75rem 1.5rem;
+    /* ~12px v, 24px h */
+    border-radius: 999px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    /* ~15px */
+    display: inline-block;
+}
+
+/* --- Health Table --- */
+.health-block {
+    padding: 1.5rem 1rem !important;
+    /* Slightly less horizontal padding for table */
+    overflow-x: auto;
+}
+
+.health-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    text-align: center;
+    width: 100%;
+}
+
+.table-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.health-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* merge borders? No, screenshot looks like grid or collapse */
+    border-spacing: 0;
+    border: 1px solid #000;
+    border-radius: 12px;
+    /* Outer radius attempt - needs separate handling for collapse */
+    overflow: hidden;
+    /* For radius */
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: var(--font-ui);
+    font-weight: 600;
+}
+
+.health-table th,
+.health-table td {
+    border: 1px solid #000;
+    padding: 0.5rem 0.2rem;
+    text-align: center;
+    font-size: 0.85rem;
+    line-height: 1.2;
+}
+
+/* Remove double borders */
+.health-table th,
+.health-table td {
+    border-right: none;
+    border-bottom: none;
+}
+
+.health-table tr th:last-child,
+.health-table tr td:last-child {
+    border-right: 1px solid #000;
+}
+
+.health-table tr:last-child td {
+    border-bottom: 1px solid #000;
+}
+
+/* Top border is on table */
+
+/* Header */
+.health-table thead tr th {
+    background: #fff;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 0.6rem 0.2rem;
+}
+
+.health-table thead tr th:first-child {
+    border-top-left-radius: 10px;
+}
+
+.health-table thead tr th:last-child {
+    border-top-right-radius: 10px;
+}
+
+/* Bottom radii */
+.health-table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px;
+}
+
+.health-table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px;
+}
+
+/* Colors */
+.row-purple td {
+    background-color: #9A71C9;
+}
+
+.row-blue td {
+    background-color: #3E67EE;
+}
+
+.row-cyan td {
+    background-color: #55C5F0;
+}
+
+.row-green td {
+    background-color: #9ACD32;
+}
+
+.row-yellow td {
+    background-color: #FFFF4D;
+}
+
+.row-orange td {
+    background-color: #FF9933;
+}
+
+.row-red td {
+    background-color: #F34B47;
+}
+
+.row-sum td,
+.row-total td {
+    background-color: #fff;
+}
+
+.cell-name {
+    text-transform: uppercase;
+    font-size: 0.75rem !important;
+}
+
+/* Specific overrides for text contrast if needed */
+
+
+/* --- Destiny Block (Предназначение) --- */
+.destiny-block {
+    padding: 1.25rem 0.75rem !important;
+}
+
+.destiny-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+    border: 1px solid #000;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.destiny-cell {
+    padding: 0.5rem 0.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    min-height: 110px;
+}
+
+.borders-right {
+    border-right: 1px solid #000;
+}
+
+.borders-bottom {
+    border-bottom: 1px solid #000;
+}
+
+.destiny-subtitle {
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+    margin-top: 0.4rem;
+    text-align: center;
+    letter-spacing: 0.05em;
+}
+
+.destiny-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    flex-wrap: nowrap;
+}
+
+.destiny-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    text-align: right;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.d-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    justify-content: flex-end;
+    white-space: nowrap;
+}
+
+.d-val.circled {
+    width: 22px;
+    height: 22px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: #fff;
+}
+
+.d-val.big-circle {
+    width: 28px;
+    height: 28px;
+    font-size: 0.9rem;
+}
+
+.brace-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.brace-symbol {
+    font-size: 2rem;
+    font-weight: 300;
+    line-height: 1;
+    color: #333;
+    padding-bottom: 4px;
+    /* Adjust optical center */
+}
+
+/* Single center alignment for bottom cells */
+.destiny-single {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 0.5rem;
+    flex-grow: 1;
+}
+
+/* --- Stats Lines --- */
+.stats-block {
+    font-family: var(--font-ui);
+    color: #000;
+    text-align: left;
+}
+
+.stat-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    flex-wrap: nowrap;
+}
+
+.stat-label {
+    margin-right: 0.5rem;
+    color: #333;
+}
+
+.stat-value {
+    border-bottom: 1px solid #000;
+    padding-bottom: 1px;
+    min-width: 40px;
+    text-align: center;
+    font-weight: 700;
+    display: inline-block;
+}
+
+/* --- Matrix Result Page Overhaul --- */
+
+:root {
+    --card-bg: #ffffff;
+    --card-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.08);
+    /* Premium soft shadow */
+    --card-radius: 24px;
+    --primary-color: #1A1A1A;
+    --accent-color: #333333;
+
+    /* Chakra Colors (Pastel/Muted for Premium feel) */
+    --chakra-purple-bg: rgba(154, 113, 201, 1);
+    --chakra-purple-text: #6b3fa0;
+    /* Darker for accessibility */
+    --chakra-blue-bg: rgba(62, 103, 238, 1);
+    --chakra-blue-text: #2a4db0;
+    --chakra-cyan-bg: rgba(62, 180, 240, 1);
+    --chakra-cyan-text: #1a8cc0;
+    --chakra-green-bg: rgba(115, 181, 95, 1);
+    --chakra-green-text: #3c7d24;
+    --chakra-yellow-bg: rgba(244, 248, 102, 1);
+    /* Yellow needs more opacity */
+    --chakra-yellow-text: #8a8d05;
+    --chakra-orange-bg: rgba(216, 138, 75, 1);
+    --chakra-orange-text: #b35f20;
+    --chakra-red-bg: rgba(243, 75, 71, 1);
+    --chakra-red-text: #c02621;
+}
+
+/* Base Layout for Result Page */
+.matrix-page-layout {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 80px);
+    /* Fill remaining height */
+    overflow-x: hidden;
+    /* Prevent horizontal scroll from absolute elements */
+    padding: 0;
+    /* Remove padding for full-bleed feel */
+    margin: 0;
+}
+
+/* Sidebar Columns - Floating/Absolute on Desktop */
+.matrix-sidebar-left {
+    position: absolute;
+    left: 40px;
+    top: 40px;
+    width: 300px;
+    z-index: 10;
+    /* Above matrix */
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.matrix-sidebar-right {
+    position: absolute;
+    right: 60px;
+    /* Shifted closer to edge */
+    top: 40px;
+    width: 520px;
+    /* Made even wider */
+    z-index: 10;
+    /* Above matrix */
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    /* Reduced gap from 1.5rem */
+    max-height: calc(100vh - 80px);
+    /* Increased max-height area */
+    overflow-y: auto;
+    padding-right: 5px;
+    /* Space for scrollbar */
+}
+
+/* Custom scrollbar for right panel */
+.matrix-sidebar-right::-webkit-scrollbar {
+    width: 4px;
+}
+
+.matrix-sidebar-right::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.matrix-sidebar-right::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+
+/* Main Matrix Center - Centered & Large */
+.matrix-center-col {
+    position: absolute;
+    top: 45%;
+    /* Moved up slightly from 50% */
+    left: 45%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* Background layer */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.matrix-chart-wrapper {
+    width: 75vh;
+    /* Increased slightly from 65vh */
+    max-width: 800px;
+    /* Relaxed cap */
+    height: auto;
+    aspect-ratio: 1/1;
+    filter: drop-shadow(0 0 40px rgba(0, 0, 0, 0.03));
+}
+
+/* Soft glow */
+
+/* Premium Card Style */
+.premium-card {
+    background: var(--card-bg);
+    border-radius: var(--card-radius);
+    box-shadow: var(--card-shadow);
+    padding: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    /* Subtle gloss/gradient */
+    background-image: linear-gradient(145deg, #ffffff 0%, #fcfcfc 100%);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Specific Sidebar Card Padding Override */
+/* Specific Sidebar Card Padding/Background Override */
+.matrix-sidebar-right .premium-card {
+    padding: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin-bottom: 2rem;
+    /* Add spacing between raw blocks */
+}
+
+.premium-card:hover {
+    box-shadow: 0 15px 50px -10px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+/* --- Specific Components --- */
+
+/* Date/Age Card */
+.premium-card.date-card {
+    padding: 1rem !important;
+    /* Reduce padding as requested */
+    width: 100%;
+}
+
+.date-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.date-card-content .btn-primary {
+    white-space: nowrap;
+    /* Force one line */
+    padding: 0.8rem 1.2rem;
+    /* Reduce padding */
+    width: 100%;
+    /* Fill width */
+    font-size: 0.95rem;
+    /* Slightly smaller text if needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.date-display {
+    font-family: var(--font-main);
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.age-display {
+    font-family: var(--font-ui);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 0.1rem;
+}
+
+/* Table Enhancements */
+.health-table-wrapper {
+    overflow: hidden;
+    border-radius: 16px;
+    border: 1px solid #000;
+    /* Black solid border */
+}
+
+.health-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-ui);
+    font-size: 0.85rem;
+    /* Increased from 0.7rem */
+}
+
+.health-table th {
+    background: #fff;
+    padding: 0.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    /* Increased from 0.65rem */
+    letter-spacing: 0.05em;
+    color: #000;
+    border-bottom: 1px solid #000;
+    border-right: 1px solid #000;
+}
+
+.health-table th:last-child {
+    border-right: none;
+}
+
+.health-table td {
+    padding: 0.25rem 0.2rem;
+    text-align: center;
+    font-weight: 600;
+    /* Medium-Bold */
+    border-right: 1px solid #000;
+    /* Black vertical borders */
+    border-bottom: 1px solid #000;
+    /* Black horizontal borders */
+    color: #000 !important;
+    /* Force black text */
+}
+
+.health-table td:last-child {
+    border-right: none;
+}
+
+.health-table tr:last-child td {
+    border-bottom: none;
+}
+
+.health-table .cell-name {
+    text-align: center;
+    /* Centered as requested */
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    padding-left: 0;
+    color: #000 !important;
+}
+
+/* Row Coloring */
+/* Row Coloring - Kept background but forced text black */
+.row-purple {
+    background-color: var(--chakra-purple-bg);
+    color: #000 !important;
+}
+
+.row-blue {
+    background-color: var(--chakra-blue-bg);
+    color: #000 !important;
+}
+
+.row-cyan {
+    background-color: var(--chakra-cyan-bg);
+    color: #000 !important;
+}
+
+.row-green {
+    background-color: var(--chakra-green-bg);
+    color: #000 !important;
+}
+
+.row-yellow {
+    background-color: var(--chakra-yellow-bg);
+    color: #000 !important;
+}
+
+.row-orange {
+    background-color: var(--chakra-orange-bg);
+    color: #000 !important;
+}
+
+.row-red {
+    background-color: var(--chakra-red-bg);
+    color: #000 !important;
+}
+
+.row-sum {
+    background-color: #f5f5f5;
+    font-weight: 700;
+}
+
+.row-total {
+    background-color: #fff;
+    font-weight: 800;
+    border-top: 2px solid rgba(0, 0, 0, 0.05);
+}
+
+
+/* Chakra Tooltips - Fixed Overlay */
+.chakra-tooltip {
+    display: none;
+    position: absolute;
+    left: 0;
+    top: 2.5rem;
+    /* Start below header (approx) */
+    bottom: 3.2rem;
+    /* Stop above totals (approx) */
+    width: 65%;
+    /* Cover Body/Energy/Emotion columns */
+    z-index: 100;
+    padding: 0.5rem;
+    pointer-events: none;
+    /* Allow hovering elsewhere? No, overlay is fine */
+}
+
+.health-table .cell-name {
+    position: static;
+    /* Let tooltip position relative to wrapper */
+    cursor: help;
+}
+
+.health-table .cell-name:hover .chakra-tooltip {
+    display: flex;
+}
+
+.tooltip-card {
+    background: #fff;
+    /* Restore white background for "Card in Frame" look */
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    /* Inner rounded corners */
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.chakra-tooltip {
+    /* ... existing positioning ... */
+    padding: 6px;
+    /* This padding creates the "Frame" thickness */
+    border-radius: 12px;
+    /* Outer rounded corners */
+}
+
+.ct-title {
+    font-weight: 800;
+    /* Extra Bold */
+    font-size: 0.8rem;
+    color: #000;
+    /* Keep black for now, or white? Assuming black contrasting on pastel */
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    /* Force uppercase */
+}
+
+.ct-text {
+    font-size: 0.75rem;
+    line-height: 1.3;
+    color: #000;
+    font-weight: 600;
+    text-transform: uppercase;
+    /* Screenshot shows uppercase text */
+}
+
+/* Tooltip Color Variants */
+.tooltip-purple {
+    background-color: var(--chakra-purple-bg) !important;
+}
+
+.tooltip-blue {
+    background-color: var(--chakra-blue-bg) !important;
+}
+
+.tooltip-cyan {
+    background-color: var(--chakra-cyan-bg) !important;
+}
+
+.tooltip-green {
+    background-color: var(--chakra-green-bg) !important;
+}
+
+.tooltip-yellow {
+    background-color: var(--chakra-yellow-bg) !important;
+}
+
+.tooltip-orange {
+    background-color: var(--chakra-orange-bg) !important;
+}
+
+.tooltip-red {
+    background-color: var(--chakra-red-bg) !important;
+}
+
+/* Destiny Block - Grid Layout */
+.destiny-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    border: 1px solid #000;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-top: 0.5rem;
+    /* Reduced from 1rem */
+}
+
+.destiny-cell {
+    padding: 2px 0;
+    /* Almost zero padding */
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    justify-content: flex-start;
+    padding: 10px 8px;
+    min-height: 50px;
+    border-right: 1px solid #000;
+    border-bottom: 1px solid #000;
+}
+
+.destiny-cell:nth-child(2n) {
+    border-right: none;
+}
+
+.destiny-cell:nth-last-child(-n+2) {
+    border-bottom: none;
+}
+
+.destiny-cell:last-child {
+    border-right: none;
+}
+
+.destiny-subtitle {
+    font-size: 0.85rem;
+    /* Increased from 0.7rem */
+    text-transform: uppercase;
+    color: #000;
+    margin-bottom: 0;
+    font-weight: 700;
+    min-height: auto;
+    line-height: 1.2;
+    text-align: center;
+}
+
+.destiny-group {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.destiny-values {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: flex-end;
+}
+
+.d-row {
+    font-size: 0.8rem;
+    /* Increased from 0.7rem */
+    color: #000;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* Slightly more gap for readability */
+    font-weight: 700;
+    text-transform: uppercase;
+    line-height: 1.2;
+}
+
+.d-val {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    /* Increased from 20px */
+    height: 26px;
+    border-radius: 50%;
+    border: 1.5px solid #000;
+    font-weight: 700;
+    color: #000;
+    background: #fff;
+    box-shadow: none;
+    font-size: 0.9rem;
+    /* Increased font */
+}
+
+.d-val.big-circle {
+    width: 34px;
+    /* Increased from 28px */
+    height: 34px;
+    font-size: 1rem;
+    border: 1.5px solid #000;
+    color: #000;
+    background: #fff;
+    margin-left: 0.3rem;
+}
+
+.brace-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+/* Deprecated helpers */
+.borders-right,
+.borders-bottom {
+    display: none;
+}
+
+.brace-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0;
+}
+
+.brace-symbol {
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: #000;
+    line-height: 1;
+    margin: 0 -3px;
+}
+
+/* Stats Block */
+.stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* Reduced from 1rem */
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 0.4rem;
+    /* Reduced from 0.8rem */
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-label {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+}
+
+.stat-val {
+    font-weight: 600;
+    font-family: var(--font-main);
+    border: none;
+    padding: 0;
+    min-width: auto;
+    text-align: right;
+    display: inline;
+}
+
+/* Responsive */
+@media (max-width: 1300px) {
+
+    /* Switch back to Stacked/Grid layout on smaller desktops/tablets 
+       where standard absolute positioning would overlap the matrix */
+    .matrix-page-layout {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+        padding: 2rem 1rem;
+        gap: 3rem;
+    }
+
+    .matrix-sidebar-left,
+    .matrix-sidebar-right,
+    .matrix-center-col {
+        position: relative;
+        left: auto;
+        top: auto;
+        right: auto;
+        transform: none;
+        width: 100%;
+        max-width: 600px;
+        z-index: 1;
+    }
+
+    .matrix-sidebar-right {
+        max-height: none;
+        overflow: visible;
+    }
+
+    .matrix-center-col {
+        order: -1;
+        /* Matrix First on Mobile */
+        height: auto;
+        min-height: auto;
+    }
+
+    .matrix-chart-wrapper {
+        width: 100%;
+        max-width: 500px;
+        /* Limit size on mobile */
+        aspect-ratio: 1/1;
+    }
+
+    .date-card-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .age-display {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 1200px) {
+    .matrix-page-layout {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+        gap: 2rem;
+    }
+
+    .matrix-center-col {
+        order: -1;
+        min-height: auto;
+    }
+
+    .matrix-sidebar-left,
+    .matrix-sidebar-right {
+        max-width: 600px;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .date-card-content {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+    }
+
+    .age-display {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 600px) {
+    .date-card-content {
+        flex-direction: column;
+    }
+
+    .destiny-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .borders-right {
+        border-right: none;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+}
+
+/* === CALENDAR PAGE STYLES === */
+.calendar-page {
+    background-color: #49979b;
+    background-image: url('http://www.transparenttextures.com/patterns/wall-4-light.png');
+    /* Removed fixed/cover settings to restore original texture look */
+    color: #1A1A1A;
+    min-height: 100vh;
+    font-family: var(--font-calendar);
+}
+
+/* Numerological Matrix Pattern (Visual) */
+.calendar-page::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background:
+        url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 0 L100 50 L50 100 L0 50 Z' fill='none' stroke='rgba(255,255,255,0.05)' stroke-width='0.5'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: -1;
+}
+
+
+.calendar-main {
+    padding-top: calc(var(--header-height) + 0.5rem);
+    padding-bottom: 0.5rem;
+    max-width: 1600px;
+    margin: 0 auto;
+
+    /* вместо height: calc(100vh - var(--header-height)); */
+    min-height: calc(100dvh - var(--header-height));
+    height: auto;
+
+    display: flex;
+    flex-direction: column;
+}
+
+/* fallback если dvh не поддерживается */
+@supports not (height: 100dvh) {
+    .calendar-main {
+        min-height: calc(100vh - var(--header-height));
+    }
+}
+
+.calendar-content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    /* Allow shrinking */
+}
+
+/* Unified Style for Year and DOB */
+.year-select,
+.calendar-dob-input {
+    background: none !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-family: var(--font-calendar) !important;
+    font-size: 2.5rem !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+    opacity: 0.6 !important;
+    outline: none !important;
+    appearance: none !important;
+    -webkit-appearance: none !important;
+    line-height: 1.2 !important;
+    transition: opacity 0.2s;
+    height: auto !important;
+}
+
+.year-select:hover,
+.calendar-dob-input:hover,
+.calendar-dob-input:focus {
+    opacity: 1 !important;
+}
+
+.year-select {
+    cursor: pointer;
+}
+
+.calendar-dob-input {
+    width: 250px;
+    /* Fixed width to prevent jumping and match layout */
+    text-align: left;
+}
+
+.calendar-dob-input::placeholder {
+    color: #fff !important;
+    opacity: 1 !important;
+}
+
+.dob-wrapper-inline {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-left: 1.5rem;
+}
+
+/* Calendar Nav */
+.calendar-nav {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    margin-bottom: 1rem;
+    /* Reduced from 1.5rem */
+    color: #fff;
+}
+
+.calendar-nav-left {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.year-select option {
+    background: #1A1A1A;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+
+.month-selector {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    width: 400px;
+    /* Increased to 400px to ensure stability */
+    /* Fixed width to prevent arrows jumping */
+}
+
+.current-month-title {
+    font-size: 3rem;
+    font-weight: 800;
+    /* Increased from 600 to 800 */
+    margin: 0;
+    flex: 1;
+    text-align: center;
+    color: #000;
+    /* Changed to black */
+}
+
+.nav-arrow {
+    background: #000;
+    /* Black background */
+    border: none;
+    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    /* White symbols */
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.nav-arrow:hover {
+    background: #f8f8f8;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.nav-arrow iconify-icon {
+    font-size: 1.2rem;
+}
+
+.calendar-intro {
+    font-size: 1rem;
+    /* Increased from 0.9rem */
+    opacity: 0.9;
+    max-width: 350px;
+    /* Increased to accommodate content */
+    justify-self: end;
+    text-align: right;
+    line-height: 1.4;
+    /* Slightly more spacious */
+    font-weight: 500;
+}
+
+/* Grid Container */
+.calendar-grid-container {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    grid-template-rows: auto repeat(5, minmax(0, 1fr));
+    /* строго 5 рядов */
+    height: 100%;
+    gap: 6px;
+}
+
+/* Day Cells Styling */
+.calendar-day {
+    background: #fff;
+    border-radius: 12px;
+
+    padding: clamp(0.45rem, 1.2vh, 0.8rem);
+    min-height: 0;
+    /* важно: убираем min-height: 100px */
+
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.25rem, 0.8vh, 0.5rem);
+
+    position: relative;
+    overflow: hidden;
+    min-width: 0;
+}
+
+.calendar-day.empty {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.day-number {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #000;
+    align-self: flex-start;
+}
+
+/* Split Cell Diagonal Styling */
+.split-cell {
+    background: linear-gradient(to bottom right, #fff calc(50% - 2px), #92c5bf 50%, #fff calc(50% + 2px)) !important;
+}
+
+.day-number-split {
+    position: static;
+    align-self: flex-end;
+    margin-top: 0.25rem;
+    font-size: clamp(0.9rem, 1.6vh, 1.1rem);
+    font-weight: 700;
+    color: #000;
+}
+
+.pill-split {
+    position: static !important;
+    margin: auto 0 0 0 !important;
+    /* прижать к низу */
+    width: 100%;
+}
+
+.calendar-header {
+    background: #000;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border: none;
+    padding: 0.3rem 0;
+    min-height: auto !important;
+}
+
+.day-number {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #000;
+    /* Changed to black */
+    align-self: flex-start;
+}
+
+/* Interpretation Pills */
+.day-pill {
+    padding: clamp(0.28rem, 0.7vh, 0.4rem) clamp(0.55rem, 1.2vh, 0.8rem);
+    border-radius: 20px;
+    font-size: clamp(0.68rem, 1.1vh, 0.8rem);
+    line-height: 1.15;
+    text-align: center;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    min-width: 0;
+    color: #000;
+    font-weight: 700;
+}
+
+/* Positioning for pills in normal cells */
+.calendar-day:not(.split-cell) .day-pill {
+    position: static;
+    margin-top: auto;
+    /* прижимает pill вниз ячейки */
+    width: 100%;
+}
+
+.pill-1 {
+    background: #ffefd1;
+}
+
+.pill-2 {
+    background: #92c5bf;
+}
+
+.pill-3 {
+    background: #def5e3;
+}
+
+.pill-4 {
+    background: #dcebff;
+}
+
+/* Summary Boxes */
+.calendar-footer-grid {
+    display: grid;
+    grid-template-columns: 1fr 2.5fr;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.footer-box {
+    padding: 1rem 1.5rem;
+    border-radius: 20px;
+    background: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.footer-box h3 {
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.focus-tags {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem 1.5rem;
+}
+
+.focus-tag {
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Site Specific Tweaks for Calendar */
+.calendar-fixed-footer {
+    position: static;
+    background: none;
+    color: #fff;
+    justify-content: center;
+    padding: 1.5rem 0;
+    /* Reduced from 4rem */
+}
+
+.calendar-fixed-footer .social-link {
+    color: #fff;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}

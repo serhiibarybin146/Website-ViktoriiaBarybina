@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - Viktoriia Barybina</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- ===== HEADER ===== -->
+    <header class="site-header">
+        <div class="header-inner container">
+            <a href="/" class="logo" aria-label="Viktoriia Barybina Home">
+                <div class="logo-text">
+                    <span class="brand-name">Viktoriia</span>
+                    <span class="brand-suffix">Barybina</span>
+                </div>
+            </a>
+            <div class="header-actions">
+                <a href="login.html" class="action-link auth-btn-dynamic" id="headerAuthBtn">
+                    <iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти
+                </a>
+                <button class="mobile-toggle" aria-label="Toggle menu" aria-controls="mainNav" aria-expanded="false">
+                    <iconify-icon icon="solar:hamburger-menu-linear"></iconify-icon>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main>
+        <section class="hero">
+            <div class="hero-grid container">
+                <!-- Form Side -->
+                <div class="hero-content" style="display:flex; align-items:center; justify-content:center;">
+                    <div class="auth-container">
+                        <h1 class="auth-title" style="margin-top:0;">Вход</h1>
+                        <form id="loginForm" class="auth-form" style="max-width:100%;" onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" id="email" class="form-input" placeholder="example@mail.com"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">Пароль</label>
+                                <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                            </div>
+                            <button type="submit" class="btn-primary">Войти</button>
+                            <p id="authError" style="color: #dc3545; margin-top: 1rem; font-size: 0.9rem;"></p>
+                        </form>
+                        <p class="auth-switch">Нет аккаунта? <a href="register.html"
+                                class="auth-link">Зарегистрироваться</a></p>
+                    </div>
+                </div>
+
+                <!-- Visual Side -->
+                <div class="hero-visual">
+                    <div class="image-wrapper">
+                        <img src="assets/hero-image.webp" alt="Viktoriia Barybina" class="hero-image">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+
+</html>

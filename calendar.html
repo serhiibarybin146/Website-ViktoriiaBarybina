@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Нумерологический Календарь - Viktoriia Barybina</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600&family=Inter:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons -->
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="calendar-overrides.css">
+</head>
+
+<body class="calendar-page">
+
+    <!-- ===== HEADER ===== -->
+    <header class="site-header site-header--glass">
+        <div class="header-inner container">
+            <a href="index.html" class="logo" aria-label="Вернуться на главную">
+                <div class="logo-text">
+                    <span class="brand-name">Viktoriia</span>
+                    <span class="brand-suffix">Barybina</span>
+                </div>
+            </a>
+
+
+
+            <nav class="main-nav">
+                <ul class="nav-list">
+                    <li><a href="index.html" class="nav-link">Главная</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="calendar-main container">
+        <div class="calendar-content-wrapper">
+
+            <div class="calendar-nav">
+                <div class="calendar-nav-left">
+                    <select id="yearSelect" class="year-select"></select>
+                    <div class="dob-wrapper-inline">
+                        <input type="text" id="dobInput" placeholder="18.12.1990" class="calendar-dob-input">
+                    </div>
+                </div>
+                <div class="month-selector">
+                    <button class="nav-arrow" id="prevMonth"><iconify-icon
+                            icon="solar:alt-arrow-left-linear"></iconify-icon></button>
+                    <h1 id="monthDisplay" class="current-month-title">Январь</h1>
+                    <button class="nav-arrow" id="nextMonth"><iconify-icon
+                            icon="solar:alt-arrow-right-linear"></iconify-icon></button>
+                </div>
+                <p class="calendar-intro">Раскройте свою судьбу с помощью моего<br>Авторского Нумерологического
+                    Календаря
+                </p>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="calendar-grid-container glass-card">
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Headers -->
+                    <div class="calendar-day calendar-header">Пн</div>
+                    <div class="calendar-day calendar-header">Вт</div>
+                    <div class="calendar-day calendar-header">Ср</div>
+                    <div class="calendar-day calendar-header">Чт</div>
+                    <div class="calendar-day calendar-header">Пт</div>
+                    <div class="calendar-day calendar-header">Сб</div>
+                    <div class="calendar-day calendar-header">Вс</div>
+
+                    <!-- Days will be injected here by JS -->
+                </div>
+            </div>
+
+            <!-- Bottom Sections -->
+            <div class="calendar-footer-grid">
+                <div class="footer-box glass-card tip-box">
+                    <h3>Совет месяца:</h3>
+                    <p>Верь в себя — это ключ к результату</p>
+                </div>
+
+                <div class="footer-box glass-card focus-box">
+                    <h3>Фокус месяца:</h3>
+                    <div class="focus-tags">
+                        <span class="focus-tag">Уединение, уход в себя</span>
+                        <span class="focus-tag">Изучение чего-то нового</span>
+                        <span class="focus-tag">Отношения с партнером</span>
+                        <span class="focus-tag">Чувство одиночества</span>
+                        <span class="focus-tag">Глубокий самоанализ</span>
+                        <span class="focus-tag">Повышение квалификации</span>
+                        <span class="focus-tag">Поиск ответов</span>
+                        <span class="focus-tag">Здоровье</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="site-footer calendar-fixed-footer">
+        <div class="footer-inner container">
+            <span class="footer-brand">Numerolog Viktoriia Barybina</span>
+            <div class="footer-socials">
+                <a href="https://www.instagram.com/numerology_with_vika/" class="social-link" target="_blank"
+                    rel="noopener noreferrer" aria-label="Instagram">
+                    <iconify-icon icon="solar:camera-linear"></iconify-icon>
+                </a>
+                <a href="https://t.me/+Grjsp70ErgFhYWUy" class="social-link" target="_blank" rel="noopener noreferrer"
+                    aria-label="Telegram">
+                    <iconify-icon icon="solar:plain-linear"></iconify-icon>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="calendar.js"></script>
+</body>
+
+</html>

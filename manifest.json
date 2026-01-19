@@ -1,0 +1,21 @@
+{
+  "name": "Viktoriia Barybina - Матрица Судьбы",
+  "short_name": "Matrix",
+  "description": "Нумерологический калькулятор Матрицы Судьбы",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1A1A1A",
+  "icons": [
+    {
+      "src": "assets/hero-image.webp",
+      "sizes": "192x192",
+      "type": "image/webp"
+    },
+    {
+      "src": "assets/hero-image.webp",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}
