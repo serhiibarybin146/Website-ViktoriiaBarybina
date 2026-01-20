@@ -149,11 +149,28 @@ document.addEventListener('DOMContentLoaded', async () => {
         let mobileNavList = document.querySelector('.main-nav .nav-list');
 
         if (authBtn) {
+            // Always hide auth button in header on mobile, move it to menu instead
+            authBtn.classList.add('desktop-only');
+
             if (user) {
                 authBtn.href = '/';
                 authBtn.innerHTML = '<iconify-icon icon="solar:widget-linear"></iconify-icon> Главная';
 
-                // Ensure Exit link is in the mobile nav list if not present
+                // Add Home to mobile nav if not present
+                let mobileHome = document.getElementById('mobileHomeLink');
+                if (!mobileHome && mobileNavList) {
+                    const li = document.createElement('li');
+                    li.id = 'mobileHomeLi';
+                    mobileHome = document.createElement('a');
+                    mobileHome.id = 'mobileHomeLink';
+                    mobileHome.href = '/';
+                    mobileHome.className = 'nav-link';
+                    mobileHome.innerHTML = 'Главная';
+                    li.appendChild(mobileHome);
+                    mobileNavList.insertBefore(li, mobileNavList.firstChild);
+                }
+
+                // Ensure Exit link is in the mobile nav list
                 let mobileExit = document.getElementById('mobileExitLink');
                 if (!mobileExit && mobileNavList) {
                     const li = document.createElement('li');
@@ -171,13 +188,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                     mobileNavList.appendChild(li);
                 }
 
-                // Add Logout button next to Home (for semi-desktop/tablet)
+                // Hide Login from mobile nav if present
+                const mobileLoginLi = document.getElementById('mobileLoginLi');
+                if (mobileLoginLi) mobileLoginLi.remove();
+
+                // Add Logout button next to Home (for desktop)
                 let logoutBtn = document.getElementById('headerLogoutBtn');
                 if (!logoutBtn && headerActions) {
                     logoutBtn = document.createElement('a');
                     logoutBtn.id = 'headerLogoutBtn';
                     logoutBtn.href = '#';
-                    logoutBtn.className = 'action-link auth-btn-dynamic desktop-only'; // Hide on mobile since it's in hamburger
+                    logoutBtn.className = 'action-link auth-btn-dynamic desktop-only';
                     logoutBtn.innerHTML = '<iconify-icon icon="solar:logout-2-linear"></iconify-icon> Выйти';
                     logoutBtn.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -188,6 +209,24 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 authBtn.href = 'login.html';
                 authBtn.innerHTML = '<iconify-icon icon="solar:login-2-linear"></iconify-icon> Войти';
+
+                // Add Login to mobile nav if not present
+                let mobileLogin = document.getElementById('mobileLoginLink');
+                if (!mobileLogin && mobileNavList) {
+                    const li = document.createElement('li');
+                    li.id = 'mobileLoginLi';
+                    mobileLogin = document.createElement('a');
+                    mobileLogin.id = 'mobileLoginLink';
+                    mobileLogin.href = 'login.html';
+                    mobileLogin.className = 'nav-link';
+                    mobileLogin.innerHTML = 'Войти';
+                    li.appendChild(mobileLogin);
+                    mobileNavList.appendChild(li);
+                }
+
+                // Remove Home and Exit from mobile nav
+                const mobileHomeLi = document.getElementById('mobileHomeLi');
+                if (mobileHomeLi) mobileHomeLi.remove();
 
                 const mobileExitLi = document.getElementById('mobileExitLi');
                 if (mobileExitLi) mobileExitLi.remove();
