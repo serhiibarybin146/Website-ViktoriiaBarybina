@@ -517,8 +517,13 @@ function initMatrixResult() {
         }
 
         const offset = isMobile ? 30 : 18; // Shift lines outwards by 18px (30px on mobile)
-        const sx = p1.x + nx * offset, sy = p1.y + ny * offset;
-        const ex = p2.x + nx * offset, ey = p2.y + ny * offset;
+        const extend = isMobile ? 15 : 5; // Extend lines to close gaps at joints
+
+        const ux = dx / len, uy = dy / len; // Unit vector along the line
+        const sx = p1.x + nx * offset - ux * extend;
+        const sy = p1.y + ny * offset - uy * extend;
+        const ex = p2.x + nx * offset + ux * extend;
+        const ey = p2.y + ny * offset + uy * extend;
 
         const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
         line.setAttribute("x1", sx); line.setAttribute("y1", sy);
