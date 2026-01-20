@@ -1,9 +1,12 @@
-const CACHE_NAME = 'matrix-cache-v57';
+const CACHE_NAME = 'matrix-cache-v58';
 const ASSETS = [
   '/',
   '/index.html',
+  '/matrix.html',
+  '/matrix-result.html',
   '/styles.css',
   '/app.js',
+  '/matrix.js',
   '/assets/hero-image.webp'
 ];
 
