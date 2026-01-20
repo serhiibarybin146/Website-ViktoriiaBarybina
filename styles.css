@@ -1001,23 +1001,25 @@ img {
         margin-top: 0 !important;
     }
 
+    #birthdate-label {
+        display: flex !important;
+        align-items: center !important;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+    }
+
     .date-display {
         font-size: 0.95rem !important;
         margin-bottom: 0 !important;
         font-weight: 600 !important;
-        display: inline-block !important;
-        line-height: 1.2 !important;
-        vertical-align: middle !important;
+        line-height: 1 !important;
     }
 
     .age-display {
-        display: inline-block !important;
         font-size: 0.85rem !important;
         color: var(--text-muted) !important;
-        margin-left: 0.3rem !important;
         font-weight: 400 !important;
-        line-height: 1.2 !important;
-        vertical-align: middle !important;
+        line-height: 1 !important;
     }
 
     .matrix-sidebar-left .btn-primary {
