@@ -981,12 +981,12 @@ img {
     }
 
     .date-card-content {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column-reverse !important;
+        justify-content: center !important;
+        align-items: center !important;
         width: 100%;
-        text-align: left;
-        gap: 0.5rem;
+        text-align: center !important;
+        gap: 0.4rem !important;
     }
 
     .matrix-sidebar-left .premium-card.date-card {
@@ -996,7 +996,8 @@ img {
         background: #fff !important;
         border: 1px solid rgba(0, 0, 0, 0.05) !important;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-        max-width: 300px !important;
+        max-width: 240px !important;
+        /* Narrower now */
         margin-inline: auto !important;
         margin-top: 0 !important;
     }
@@ -1013,16 +1014,19 @@ img {
         display: inline-block !important;
         font-size: 0.85rem !important;
         color: var(--text-muted) !important;
-        margin-left: 0.4rem !important;
+        margin-left: 0.35rem !important;
         font-weight: 400 !important;
         line-height: 1;
     }
 
     .matrix-sidebar-left .btn-primary {
         margin-top: 0 !important;
-        padding: 0.4rem 0.75rem !important;
+        margin-bottom: 0.2rem !important;
+        padding: 0.45rem 0.8rem !important;
         font-size: 0.75rem !important;
-        width: auto !important;
+        width: 100% !important;
+        /* Match card inside padding */
+        max-width: 100% !important;
         border-radius: 8px !important;
         white-space: nowrap;
     }
