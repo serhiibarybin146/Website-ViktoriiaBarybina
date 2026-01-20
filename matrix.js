@@ -281,8 +281,8 @@ function initMatrixResult() {
 
     // Mobile Scaling factors
     const isMobile = window.innerWidth < 768;
-    const rScale = isMobile ? 1.25 : 1.0;
-    const tScale = isMobile ? 1.2 : 1.0;
+    const rScale = isMobile ? 1.2 : 1.0; // Slightly reduced to fit better
+    const tScale = isMobile ? 1.15 : 1.0;
 
     // Angles for indices 0-7. 0 is Left (PI).
     // 0: Left (PI), 1: TL (5/4 PI), 2: Top (3/2 PI), 3: TR (7/4 PI), 4: Right (0), 5: BR (1/4 PI), 6: Bottom (1/2 PI), 7: BL (3/4 PI)
@@ -299,7 +299,9 @@ function initMatrixResult() {
 
     const outerPoints = [];
     const uPoints = [];
-    const innerRadius2 = 197;
+    // Spacing adjustment for mobile to avoid overlaps
+    const innerRadius = isMobile ? 205 : 230;
+    const innerRadius2 = isMobile ? 150 : 197;
 
     // Generate Points
     for (let i = 0; i < 8; i++) {
@@ -388,7 +390,7 @@ function initMatrixResult() {
     // Center
     drawNode(cx, cy, 28, "#F4F866", "#000", centerValue, "#000", 18);
     // ZK
-    const zkDotY = cy + 40;
+    const zkDotY = cy + (isMobile ? 52 : 40);
     const scaledZKR = 10 * rScale;
     const scaledZKFS = 10 * tScale;
 
@@ -404,7 +406,6 @@ function initMatrixResult() {
 
 
     // Inner Layers (Y and U)
-    const innerRadius = 230;
     // Y Points (Between U and Outer)
     for (let i = 0; i < 8; i++) {
         const px = cx + innerRadius * Math.cos(angles[i]);
