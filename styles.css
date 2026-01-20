@@ -579,18 +579,22 @@ img {
 
 .btn-primary {
     padding: 1rem;
-    background: var(--text-main);
-    color: #fff;
-    border: none;
+    background: transparent;
+    color: var(--text-main);
+    border: 2px solid var(--text-main);
     border-radius: 12px;
     font-size: 1rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
-    transition: opacity 0.2s;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-primary:hover {
-    opacity: 0.9;
+    background: var(--text-main);
+    color: #fff;
 }
 
 .auth-switch {
