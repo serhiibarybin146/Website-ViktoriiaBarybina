@@ -279,6 +279,11 @@ function initMatrixResult() {
     svg.innerHTML = "";
     const width = 700, height = 700, cx = 350, cy = 350, radius = 270;
 
+    // Mobile Scaling factors (25% larger circles, 20% larger fonts)
+    const isMobile = window.innerWidth < 768;
+    const rScale = isMobile ? 1.25 : 1.0;
+    const tScale = isMobile ? 1.20 : 1.0;
+
     // Angles for indices 0-7. 0 is Left (PI).
     // 0: Left (PI), 1: TL (5/4 PI), 2: Top (3/2 PI), 3: TR (7/4 PI), 4: Right (0), 5: BR (1/4 PI), 6: Bottom (1/2 PI), 7: BL (3/4 PI)
     const angles = [
@@ -294,7 +299,10 @@ function initMatrixResult() {
 
     const outerPoints = [];
     const uPoints = [];
-    const innerRadius2 = 197;
+    // Spacing adjustment for mobile to make nodes touch proportionally (Outer: 22*1.25=27.5, Y: 18*1.25=22.5, U: 15*1.25=18.75)
+    // Distance O-Y = 50, Distance Y-U = 41.25. Total from Outer = 91.25.
+    const innerRadius = isMobile ? 220 : 230;
+    const innerRadius2 = isMobile ? 178.75 : 197;
 
     // Generate Points
     for (let i = 0; i < 8; i++) {
@@ -356,15 +364,18 @@ function initMatrixResult() {
 
     // ————— NODES —————
     function drawNode(x, y, r, fill, stroke, val, txtCol, fontSize = 25) {
+        const scaledR = r * rScale;
+        const scaledFS = fontSize * tScale;
+
         const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", r);
+        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", scaledR);
         c.setAttribute("fill", fill); c.setAttribute("stroke", stroke); c.setAttribute("stroke-width", "2");
         nodeLayer.appendChild(c);
 
         const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
         t.setAttribute("x", x); t.setAttribute("y", y);
         t.setAttribute("text-anchor", "middle"); t.setAttribute("dominant-baseline", "central");
-        t.setAttribute("font-size", fontSize); t.setAttribute("font-weight", "bold");
+        t.setAttribute("font-size", scaledFS); t.setAttribute("font-weight", "bold");
         t.setAttribute("fill", txtCol);
         t.textContent = val;
         textLayer.appendChild(t);
@@ -380,20 +391,22 @@ function initMatrixResult() {
     // Center
     drawNode(cx, cy, 28, "#F4F866", "#000", centerValue, "#000", 18);
     // ZK
-    const zkDotY = cy + 40;
+    const zkDotY = cy + (isMobile ? 55 : 40);
+    const scaledZKR = 10 * rScale;
+    const scaledZKFS = 10 * tScale;
+
     const zkC = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-    zkC.setAttribute("cx", cx); zkC.setAttribute("cy", zkDotY); zkC.setAttribute("r", 10);
+    zkC.setAttribute("cx", cx); zkC.setAttribute("cy", zkDotY); zkC.setAttribute("r", scaledZKR);
     zkC.setAttribute("fill", "#F4F866"); zkC.setAttribute("stroke", "#000"); zkC.setAttribute("stroke-width", "1");
     nodeLayer.appendChild(zkC);
     const zkT = document.createElementNS("http://www.w3.org/2000/svg", "text");
     zkT.setAttribute("x", cx); zkT.setAttribute("y", zkDotY);
     zkT.setAttribute("text-anchor", "middle"); zkT.setAttribute("dominant-baseline", "central");
-    zkT.setAttribute("font-size", 10); zkT.setAttribute("font-weight", "bold"); zkT.textContent = "ЗК";
+    zkT.setAttribute("font-size", scaledZKFS); zkT.setAttribute("font-weight", "bold"); zkT.textContent = "ЗК";
     textLayer.appendChild(zkT);
 
 
     // Inner Layers (Y and U)
-    const innerRadius = 230;
     // Y Points (Between U and Outer)
     for (let i = 0; i < 8; i++) {
         const px = cx + innerRadius * Math.cos(angles[i]);
@@ -429,14 +442,17 @@ function initMatrixResult() {
     }
 
     function drawSmall(x, y, txt, fill, txtCol) {
+        const scaledR = 6 * rScale;
+        const scaledFS = 8 * tScale;
+
         const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 6);
+        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", scaledR);
         c.setAttribute("fill", fill); c.setAttribute("stroke", "none");
         nodeLayer.appendChild(c);
         const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
         t.setAttribute("x", x); t.setAttribute("y", y);
         t.setAttribute("text-anchor", "middle"); t.setAttribute("dominant-baseline", "central");
-        t.setAttribute("font-size", 8); t.setAttribute("fill", txtCol); t.setAttribute("font-weight", "bold");
+        t.setAttribute("font-size", scaledFS); t.setAttribute("fill", txtCol); t.setAttribute("font-weight", "bold");
         t.textContent = txt;
         textLayer.appendChild(t);
     }
@@ -471,7 +487,7 @@ function initMatrixResult() {
             // Tweaks for readability logic... simplified
             const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
             t.setAttribute("x", mx); t.setAttribute("y", my);
-            t.setAttribute("text-anchor", "middle"); t.setAttribute("font-size", 9);
+            t.setAttribute("text-anchor", "middle"); t.setAttribute("font-size", 9 * tScale);
             t.setAttribute("transform", `rotate(${deg} ${mx} ${my}) translate(0, -5)`);
             t.textContent = txt;
             textLayer.appendChild(t);
@@ -500,7 +516,7 @@ function initMatrixResult() {
             nx = -nx; ny = -ny;
         }
 
-        const offset = 18; // Shift lines outwards by 18px
+        const offset = isMobile ? 30 : 18; // Shift lines outwards by 18px (30px on mobile)
         const sx = p1.x + nx * offset, sy = p1.y + ny * offset;
         const ex = p2.x + nx * offset, ey = p2.y + ny * offset;
 
@@ -527,7 +543,7 @@ function initMatrixResult() {
 
             // Dot
             const d = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-            d.setAttribute("cx", tx); d.setAttribute("cy", ty); d.setAttribute("r", j === 4 ? 5 : 2.5);
+            d.setAttribute("cx", tx); d.setAttribute("cy", ty); d.setAttribute("r", (j === 4 ? 5 : 2.5) * rScale);
             d.setAttribute("fill", "#cc3366"); d.setAttribute("stroke", "#fff");
             lineLayer.appendChild(d);
 
@@ -536,7 +552,7 @@ function initMatrixResult() {
             const shiftX = config.shifts?.[j]?.x || -9;
             const shiftY = config.shifts?.[j]?.y || -1;
             l.setAttribute("x", tx + shiftX); l.setAttribute("y", ty + shiftY);
-            l.setAttribute("text-anchor", "middle"); l.setAttribute("font-size", j === 4 ? 11 : 9);
+            l.setAttribute("text-anchor", "middle"); l.setAttribute("font-size", (j === 4 ? 11 : 9) * tScale);
             l.textContent = vals[j];
             textLayer.appendChild(l);
 
@@ -546,7 +562,7 @@ function initMatrixResult() {
                 const ysx = config.yearShifts?.[j]?.x || 5;
                 const ysy = config.yearShifts?.[j]?.y || 8;
                 yLb.setAttribute("x", tx + ysx); yLb.setAttribute("y", ty + ysy);
-                yLb.setAttribute("font-size", j === 4 ? 8 : 7); yLb.setAttribute("fill", j === 4 ? "#000" : "#888");
+                yLb.setAttribute("font-size", (j === 4 ? 8 : 7) * tScale); yLb.setAttribute("fill", j === 4 ? "#000" : "#888");
                 if (j === 4) yLb.setAttribute("font-weight", "bold");
                 yLb.textContent = config.years[j];
                 textLayer.appendChild(yLb);
@@ -610,28 +626,34 @@ function initMatrixResult() {
         const y = cy + rad * Math.sin(ang) + offY;
 
         drawNode(x, y, 12, col, "#000", val, "#000", 14);
+
+        const scaledLR = 7 * rScale;
+        const scaledLFS = 9 * tScale;
+
         // Letter
         const lc = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        lc.setAttribute("cx", x + lOffX); lc.setAttribute("cy", y + lOffY); lc.setAttribute("r", 7);
+        lc.setAttribute("cx", x + lOffX); lc.setAttribute("cy", y + lOffY); lc.setAttribute("r", scaledLR);
         lc.setAttribute("fill", "#000");
         const lt = document.createElementNS("http://www.w3.org/2000/svg", "text");
         lt.setAttribute("x", x + lOffX); lt.setAttribute("y", y + lOffY);
         lt.setAttribute("text-anchor", "middle"); lt.setAttribute("dominant-baseline", "central");
-        lt.setAttribute("fill", "#fff"); lt.setAttribute("font-size", 9); lt.setAttribute("font-weight", "bold");
+        lt.setAttribute("fill", "#fff"); lt.setAttribute("font-size", scaledLFS); lt.setAttribute("font-weight", "bold");
         lt.textContent = letter;
         nodeLayer.appendChild(lc); textLayer.appendChild(lt);
 
         if (dol) {
             const d = document.createElementNS("http://www.w3.org/2000/svg", "text");
             d.setAttribute("x", x - 15); d.setAttribute("y", y - 37);
-            d.setAttribute("font-size", 26); d.setAttribute("fill", "#04dd00"); d.setAttribute("font-weight", "bold");
+            d.setAttribute("font-size", 26 * tScale); d.setAttribute("fill", "#04dd00"); d.setAttribute("font-weight", "bold");
             d.textContent = "$";
             textLayer.appendChild(d);
         }
         if (hrt) {
             const hx = x - 35, hy = y - 35;
+            const hScale = rScale;
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-            path.setAttribute("d", `M ${hx} ${hy} c -5 -5, -15 0, -10 10 c 5 10, 15 10, 20 0 c 5 -10, -5 -15, -10 -10 Z`);
+            // Scale the heart path
+            path.setAttribute("d", `M ${hx} ${hy} c ${-5 * hScale} ${-5 * hScale}, ${-15 * hScale} 0, ${-10 * hScale} ${10 * hScale} c ${5 * hScale} ${10 * hScale}, ${15 * hScale} ${10 * hScale}, ${20 * hScale} 0 c ${5 * hScale} ${-10 * hScale}, ${-5 * hScale} ${-15 * hScale}, ${-10 * hScale} ${-10 * hScale} Z`);
             path.setAttribute("fill", "#e84e42"); path.setAttribute("stroke", "#000");
             nodeLayer.appendChild(path);
         }
@@ -655,9 +677,13 @@ function initMatrixResult() {
         const p = outerPoints[i];
         const x = p.x + ox, y = p.y + oy;
 
+        const scaledCircleR = 12 * rScale;
+        const scaledLetterFS = 14 * tScale;
+        const scaledLabelFS = 13 * tScale;
+
         // Marker Circle
         const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", 12); // Slightly larger
+        c.setAttribute("cx", x); c.setAttribute("cy", y); c.setAttribute("r", scaledCircleR);
         c.setAttribute("fill", (["В", "Г"].includes(letter) ? "#e84e42" : (i % 2 !== 0 ? "#000" : "#a185c8")));
         nodeLayer.appendChild(c);
 
@@ -665,16 +691,16 @@ function initMatrixResult() {
         const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
         t.setAttribute("x", x); t.setAttribute("y", y);
         t.setAttribute("text-anchor", "middle"); t.setAttribute("dominant-baseline", "central");
-        t.setAttribute("fill", "#fff"); t.setAttribute("font-weight", "bold"); t.setAttribute("font-size", 14);
+        t.setAttribute("fill", "#fff"); t.setAttribute("font-weight", "bold"); t.setAttribute("font-size", scaledLetterFS);
         t.textContent = letter;
         textLayer.appendChild(t);
 
         // Age Label (outside)
         const sub = document.createElementNS("http://www.w3.org/2000/svg", "text");
-        sub.setAttribute("x", x + tOx); sub.setAttribute("y", y + tOy);
+        sub.setAttribute("x", x + tOx * tScale); sub.setAttribute("y", y + tOy * tScale);
         sub.setAttribute("text-anchor", tAlign); // start, end, middle
         sub.setAttribute("dominant-baseline", "central");
-        sub.setAttribute("font-size", 13); sub.setAttribute("font-weight", "bold"); sub.setAttribute("fill", "#000");
+        sub.setAttribute("font-size", scaledLabelFS); sub.setAttribute("font-weight", "bold"); sub.setAttribute("fill", "#000");
         sub.textContent = txt;
         textLayer.appendChild(sub);
     }
