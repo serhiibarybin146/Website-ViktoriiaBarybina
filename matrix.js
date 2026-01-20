@@ -713,7 +713,7 @@ function initMatrixResult() {
 
     // Refined positions based on reference (Applied 5% zoom to offsets)
     // 0: Left (A) - Text Below
-    drawOuterMarker(0, "A", "0 лет", (isMobile ? -47.5 * zoom : -40 * zoom), 0, "middle", 0, 22);
+    drawOuterMarker(0, "A", "0 лет", (isMobile ? -52.5 * zoom : -45 * zoom), 0, "middle", 0, 22);
 
     // 1: TL (Д) - Text to Left
     drawOuterMarker(1, "Д", "10 лет", (isMobile ? -30 * zoom : -25 * zoom), (isMobile ? -30 * zoom : -25 * zoom), "end", -15, 0);
@@ -725,7 +725,7 @@ function initMatrixResult() {
     drawOuterMarker(3, "Е", "30 лет", (isMobile ? 30 * zoom : 25 * zoom), (isMobile ? -30 * zoom : -25 * zoom), "start", 15, 0);
 
     // 4: Right (В) - Text Below
-    drawOuterMarker(4, "В", "40 лет", (isMobile ? 47.5 * zoom : 40 * zoom), 0, "middle", 0, 22);
+    drawOuterMarker(4, "В", "40 лет", (isMobile ? 52.5 * zoom : 45 * zoom), 0, "middle", 0, 22);
 
     // 5: BR (Ж) - Text to Right
     drawOuterMarker(5, "Ж", "50 лет", (isMobile ? 30 * zoom : 25 * zoom), (isMobile ? 30 * zoom : 25 * zoom), "start", 15, 0);
