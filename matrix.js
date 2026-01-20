@@ -664,9 +664,9 @@ function initMatrixResult() {
             nodeLayer.appendChild(path);
         }
     }
-    drawExtra(5, (isMobile ? 50 : 10), (isMobile ? 50 : 10), innerA, "К", -13, -13, "#fff", false, false);
-    drawExtra(5, (isMobile ? 160 : 80), (isMobile ? 20 : 10), innerB, "О", -13, -13, "#fff", true, false);
-    drawExtra(5, (isMobile ? 20 : 10), (isMobile ? 160 : 80), innerC, "Н", -13, -13, "#fff", false, true);
+    drawExtra(5, (isMobile ? 20 : 10), (isMobile ? 20 : 10), innerA, "К", -13, -13, "#fff", false, false);
+    drawExtra(5, (isMobile ? 100 : 80), (isMobile ? 20 : 10), innerB, "О", -13, -13, "#fff", true, false);
+    drawExtra(5, (isMobile ? 20 : 10), (isMobile ? 100 : 80), innerC, "Н", -13, -13, "#fff", false, true);
 
     // Mids
     function drawMidExtra(idx, val) {
