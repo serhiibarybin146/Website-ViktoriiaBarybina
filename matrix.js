@@ -277,12 +277,14 @@ function initMatrixResult() {
     // ————— SVG SETUP —————
     const svg = document.getElementById("svg");
     svg.innerHTML = "";
-    const width = 700, height = 700, cx = 350, cy = 350, radius = 270;
+    const width = 700, height = 700, cx = 350, cy = 350;
+    const zoom = 1.05; // 5% proportional enlargement
+    const radius = 270 * zoom;
 
-    // Mobile Scaling factors (25% larger circles, 20% larger fonts)
+    // Mobile Scaling factors (25% larger circles + 5% zoom ≈ 31%, 20% larger fonts + 5% zoom ≈ 26%)
     const isMobile = window.innerWidth < 768;
-    const rScale = isMobile ? 1.25 : 1.0;
-    const tScale = isMobile ? 1.20 : 1.0;
+    const rScale = isMobile ? (1.25 * zoom) : 1.05;
+    const tScale = isMobile ? (1.20 * zoom) : 1.05;
 
     // Angles for indices 0-7. 0 is Left (PI).
     // 0: Left (PI), 1: TL (5/4 PI), 2: Top (3/2 PI), 3: TR (7/4 PI), 4: Right (0), 5: BR (1/4 PI), 6: Bottom (1/2 PI), 7: BL (3/4 PI)
@@ -299,10 +301,9 @@ function initMatrixResult() {
 
     const outerPoints = [];
     const uPoints = [];
-    // Spacing adjustment for mobile to make nodes touch proportionally (Outer: 22*1.25=27.5, Y: 18*1.25=22.5, U: 15*1.25=18.75)
-    // Distance O-Y = 50, Distance Y-U = 41.25. Total from Outer = 91.25.
-    const innerRadius = isMobile ? 220 : 230;
-    const innerRadius2 = isMobile ? 178.75 : 197;
+    // Spacing adjustment for mobile to make nodes touch proportionally
+    const innerRadius = isMobile ? (220 * zoom) : (230 * zoom);
+    const innerRadius2 = isMobile ? (178.75 * zoom) : (197 * zoom);
 
     // Generate Points
     for (let i = 0; i < 8; i++) {
@@ -391,7 +392,7 @@ function initMatrixResult() {
     // Center
     drawNode(cx, cy, 28, "#F4F866", "#000", centerValue, "#000", 18);
     // ZK
-    const zkDotY = cy + (isMobile ? 50 : 40);
+    const zkDotY = cy + (isMobile ? (50 * zoom) : (40 * zoom));
     const scaledZKR = 10 * rScale;
     const scaledZKFS = 10 * tScale;
 
@@ -516,8 +517,8 @@ function initMatrixResult() {
             nx = -nx; ny = -ny;
         }
 
-        const offset = isMobile ? 30 : 18; // Shift lines outwards by 18px (30px on mobile)
-        const extend = isMobile ? 15 : 5; // Extend lines to close gaps at joints
+        const offset = isMobile ? (30 * zoom) : (18 * zoom); // Shift lines outwards
+        const extend = isMobile ? (15 * zoom) : (5 * zoom); // Extend lines to close gaps
 
         const ux = dx / len, uy = dy / len; // Unit vector along the line
         const sx = p1.x + nx * offset - ux * extend;
@@ -710,28 +711,28 @@ function initMatrixResult() {
         textLayer.appendChild(sub);
     }
 
-    // Refined positions based on reference
+    // Refined positions based on reference (Applied 5% zoom to offsets)
     // 0: Left (A) - Text to Left
-    drawOuterMarker(0, "A", "0 лет", (isMobile ? -42.5 : -35), 0, "end", -18, 0);
+    drawOuterMarker(0, "A", "0 лет", (isMobile ? -42.5 * zoom : -35 * zoom), 0, "end", -18, 0);
 
     // 1: TL (Д) - Text to Left
-    drawOuterMarker(1, "Д", "10 лет", (isMobile ? -30 : -25), (isMobile ? -30 : -25), "end", -15, 0);
+    drawOuterMarker(1, "Д", "10 лет", (isMobile ? -30 * zoom : -25 * zoom), (isMobile ? -30 * zoom : -25 * zoom), "end", -15, 0);
 
     // 2: Top (Б) - Text to Right
-    drawOuterMarker(2, "Б", "20 лет", 0, (isMobile ? -42.5 : -35), "start", 15, 0);
+    drawOuterMarker(2, "Б", "20 лет", 0, (isMobile ? -42.5 * zoom : -35 * zoom), "start", 15, 0);
 
     // 3: TR (Е) - Text to Right
-    drawOuterMarker(3, "Е", "30 лет", (isMobile ? 30 : 25), (isMobile ? -30 : -25), "start", 15, 0);
+    drawOuterMarker(3, "Е", "30 лет", (isMobile ? 30 * zoom : 25 * zoom), (isMobile ? -30 * zoom : -25 * zoom), "start", 15, 0);
 
     // 4: Right (В) - Text to Right
-    drawOuterMarker(4, "В", "40 лет", (isMobile ? 42.5 : 35), 0, "start", 18, 0);
+    drawOuterMarker(4, "В", "40 лет", (isMobile ? 42.5 * zoom : 35 * zoom), 0, "start", 18, 0);
 
     // 5: BR (Ж) - Text to Right
-    drawOuterMarker(5, "Ж", "50 лет", (isMobile ? 30 : 25), (isMobile ? 30 : 25), "start", 15, 0);
+    drawOuterMarker(5, "Ж", "50 лет", (isMobile ? 30 * zoom : 25 * zoom), (isMobile ? 30 * zoom : 25 * zoom), "start", 15, 0);
 
     // 6: Bottom (Г) - Text to Right
-    drawOuterMarker(6, "Г", "60 лет", 0, (isMobile ? 42.5 : 35), "start", 15, 0);
+    drawOuterMarker(6, "Г", "60 лет", 0, (isMobile ? 42.5 * zoom : 35 * zoom), "start", 15, 0);
 
     // 7: BL (З) - Text to Left
-    drawOuterMarker(7, "З", "70 лет", (isMobile ? -30 : -25), (isMobile ? 30 : 25), "end", -15, 0);
+    drawOuterMarker(7, "З", "70 лет", (isMobile ? -30 * zoom : -25 * zoom), (isMobile ? 30 * zoom : 25 * zoom), "end", -15, 0);
 }
