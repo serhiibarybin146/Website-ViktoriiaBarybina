@@ -438,8 +438,8 @@ function initMatrixResult() {
     for (let i = 0; i < 8; i++) {
         drawNode(uPoints[i].x, uPoints[i].y, 15, uColors[i], "#000", U[i], uTxtColors[i], 16);
         // Small markers near U5/U6
-        if (i === 4) drawSmall(uPoints[i].x - 22, uPoints[i].y, "Л", "#D88A4B", "#fff");
-        if (i === 6) drawSmall(uPoints[i].x, uPoints[i].y - 22, "М", "#D88A4B", "#fff");
+        if (i === 4) drawSmall(uPoints[i].x - (isMobile ? 28 : 22), uPoints[i].y, "Л", "#D88A4B", "#fff");
+        if (i === 6) drawSmall(uPoints[i].x, uPoints[i].y - (isMobile ? 28 : 22), "М", "#D88A4B", "#fff");
     }
 
     function drawSmall(x, y, txt, fill, txtCol) {
