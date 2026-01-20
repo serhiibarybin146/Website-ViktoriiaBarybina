@@ -1013,7 +1013,7 @@ img {
     }
 
     .date-display {
-        font-size: 1.15rem !important;
+        font-size: 1.05rem !important;
         font-weight: 700 !important;
         margin: 0 !important;
         line-height: 1.2 !important;
@@ -1576,7 +1576,7 @@ img {
 .date-display {
     font-family: var(--font-main);
     font-weight: 700;
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     margin-bottom: 0.5rem;
     color: var(--primary-color);
 }
