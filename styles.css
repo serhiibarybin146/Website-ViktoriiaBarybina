@@ -1005,17 +1005,17 @@ img {
         font-size: 0.95rem !important;
         margin-bottom: 0 !important;
         font-weight: 600 !important;
-        display: block !important;
-        line-height: 1.1;
+        display: inline-block !important;
+        line-height: 1;
     }
 
     .age-display {
-        display: block !important;
-        font-size: 0.8rem !important;
+        display: inline-block !important;
+        font-size: 0.85rem !important;
         color: var(--text-muted) !important;
-        margin-left: 0 !important;
+        margin-left: 0.4rem !important;
         font-weight: 400 !important;
-        line-height: 1.1;
+        line-height: 1;
     }
 
     .matrix-sidebar-left .btn-primary {
