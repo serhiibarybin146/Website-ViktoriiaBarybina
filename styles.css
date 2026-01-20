@@ -581,7 +581,7 @@ img {
     padding: 1rem;
     background: transparent;
     color: var(--text-main);
-    border: 2px solid var(--text-main);
+    border: 1px solid var(--text-main);
     border-radius: 12px;
     font-size: 1rem;
     font-weight: 600;
@@ -1013,14 +1013,14 @@ img {
     }
 
     .date-display {
-        font-size: 0.95rem !important;
-        font-weight: 600 !important;
+        font-size: 1.15rem !important;
+        font-weight: 700 !important;
         margin: 0 !important;
         line-height: 1.2 !important;
     }
 
     .age-display {
-        font-size: 0.85rem !important;
+        font-size: 1.0rem !important;
         color: var(--text-muted) !important;
         font-weight: 400 !important;
         margin: 0 !important;
@@ -1029,8 +1029,8 @@ img {
 
     .matrix-sidebar-left .btn-primary {
         margin: 0 !important;
-        padding: 0.45rem 0.75rem !important;
-        font-size: 0.75rem !important;
+        padding: 0.35rem 0.65rem !important;
+        font-size: 0.7rem !important;
         width: auto !important;
         border-radius: 8px !important;
         white-space: nowrap !important;
@@ -1565,13 +1565,9 @@ img {
 
 .date-card-content .btn-primary {
     white-space: nowrap;
-    /* Force one line */
-    padding: 0.8rem 1.2rem;
-    /* Reduce padding */
+    padding: 0.6rem 1rem;
     width: 100%;
-    /* Fill width */
-    font-size: 0.95rem;
-    /* Slightly smaller text if needed */
+    font-size: 0.85rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1580,7 +1576,7 @@ img {
 .date-display {
     font-family: var(--font-main);
     font-weight: 700;
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     margin-bottom: 0.5rem;
     color: var(--primary-color);
 }
@@ -1588,7 +1584,7 @@ img {
 .age-display {
     font-family: var(--font-ui);
     color: var(--text-muted);
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     margin-bottom: 0.1rem;
 }
 
