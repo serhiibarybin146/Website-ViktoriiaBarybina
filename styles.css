@@ -949,8 +949,8 @@ img {
     .matrix-page-layout {
         display: flex;
         flex-direction: column;
-        padding: 0.75rem 1rem 2rem;
-        gap: 1.25rem;
+        padding: 0.25rem 1rem 2rem;
+        gap: 1rem;
     }
 
     .matrix-chart-wrapper {
@@ -998,6 +998,7 @@ img {
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
         max-width: 300px !important;
         margin-inline: auto !important;
+        margin-top: 0 !important;
     }
 
     .date-display {
@@ -1031,6 +1032,8 @@ img {
         /* Move to top */
         margin-bottom: -1.75rem;
         padding-top: 0;
+        margin-top: -0.5rem;
+        /* Pull up even more */
     }
 
     .hero-form-container {
