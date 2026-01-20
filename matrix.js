@@ -649,13 +649,13 @@ function initMatrixResult() {
 
         if (dol) {
             const d = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            d.setAttribute("x", x - 15); d.setAttribute("y", y - 37);
+            d.setAttribute("x", x - (isMobile ? 25 : 15)); d.setAttribute("y", y - (isMobile ? 47 : 37));
             d.setAttribute("font-size", 26 * tScale); d.setAttribute("fill", "#04dd00"); d.setAttribute("font-weight", "bold");
             d.textContent = "$";
             textLayer.appendChild(d);
         }
         if (hrt) {
-            const hx = x - 35, hy = y - 35;
+            const hx = x - (isMobile ? 45 : 35), hy = y - (isMobile ? 45 : 35);
             const hScale = rScale;
             const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
             // Scale the heart path
