@@ -64,6 +64,15 @@ img {
     display: block;
 }
 
+/* Visibility Utilities */
+.mobile-only {
+    display: none !important;
+}
+
+.desktop-only {
+    display: flex !important;
+}
+
 /* Header */
 .site-header {
     position: fixed;
@@ -828,8 +837,18 @@ img {
         font-size: 0.9rem !important;
     }
 
-    .auth-btn-dynamic.desktop-only {
+    .auth-btn-dynamic.desktop-only,
+    .desktop-only {
         display: none !important;
+    }
+
+    .mobile-only {
+        display: block !important;
+    }
+
+    /* li should keep their display but only on mobile */
+    li.mobile-only {
+        display: list-item !important;
     }
 
     .mobile-toggle {

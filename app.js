@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!mobileHome && mobileNavList) {
                     const li = document.createElement('li');
                     li.id = 'mobileHomeLi';
+                    li.className = 'mobile-only';
                     mobileHome = document.createElement('a');
                     mobileHome.id = 'mobileHomeLink';
                     mobileHome.href = '/';
@@ -175,6 +176,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!mobileExit && mobileNavList) {
                     const li = document.createElement('li');
                     li.id = 'mobileExitLi';
+                    li.className = 'mobile-only';
                     mobileExit = document.createElement('a');
                     mobileExit.id = 'mobileExitLink';
                     mobileExit.href = '#';
@@ -215,6 +217,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 if (!mobileLogin && mobileNavList) {
                     const li = document.createElement('li');
                     li.id = 'mobileLoginLi';
+                    li.className = 'mobile-only';
                     mobileLogin = document.createElement('a');
                     mobileLogin.id = 'mobileLoginLink';
                     mobileLogin.href = 'login.html';
