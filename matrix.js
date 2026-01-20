@@ -707,26 +707,26 @@ function initMatrixResult() {
 
     // Refined positions based on reference
     // 0: Left (A) - Text to Left
-    drawOuterMarker(0, "A", "0 лет", -35, 0, "end", -18, 0);
+    drawOuterMarker(0, "A", "0 лет", (isMobile ? -45 : -35), 0, "end", -18, 0);
 
     // 1: TL (Д) - Text to Left
-    drawOuterMarker(1, "Д", "10 лет", -25, -25, "end", -15, 0);
+    drawOuterMarker(1, "Д", "10 лет", (isMobile ? -32 : -25), (isMobile ? -32 : -25), "end", -15, 0);
 
     // 2: Top (Б) - Text to Right
-    drawOuterMarker(2, "Б", "20 лет", 0, -35, "start", 15, 0);
+    drawOuterMarker(2, "Б", "20 лет", 0, (isMobile ? -45 : -35), "start", 15, 0);
 
     // 3: TR (Е) - Text to Right
-    drawOuterMarker(3, "Е", "30 лет", 25, -25, "start", 15, 0);
+    drawOuterMarker(3, "Е", "30 лет", (isMobile ? 32 : 25), (isMobile ? -32 : -25), "start", 15, 0);
 
     // 4: Right (В) - Text to Right
-    drawOuterMarker(4, "В", "40 лет", 35, 0, "start", 18, 0);
+    drawOuterMarker(4, "В", "40 лет", (isMobile ? 45 : 35), 0, "start", 18, 0);
 
     // 5: BR (Ж) - Text to Right
-    drawOuterMarker(5, "Ж", "50 лет", 25, 25, "start", 15, 0);
+    drawOuterMarker(5, "Ж", "50 лет", (isMobile ? 32 : 25), (isMobile ? 32 : 25), "start", 15, 0);
 
     // 6: Bottom (Г) - Text to Right
-    drawOuterMarker(6, "Г", "60 лет", 0, 35, "start", 15, 0);
+    drawOuterMarker(6, "Г", "60 лет", 0, (isMobile ? 45 : 35), "start", 15, 0);
 
     // 7: BL (З) - Text to Left
-    drawOuterMarker(7, "З", "70 лет", -25, 25, "end", -15, 0);
+    drawOuterMarker(7, "З", "70 лет", (isMobile ? -32 : -25), (isMobile ? 32 : 25), "end", -15, 0);
 }
