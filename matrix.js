@@ -649,7 +649,7 @@ function initMatrixResult() {
 
         if (dol) {
             const d = document.createElementNS("http://www.w3.org/2000/svg", "text");
-            d.setAttribute("x", x - (isMobile ? 40 : 25)); d.setAttribute("y", y - (isMobile ? 47 : 37));
+            d.setAttribute("x", x - (isMobile ? 52 : 32)); d.setAttribute("y", y - (isMobile ? 47 : 37));
             d.setAttribute("font-size", 26 * tScale); d.setAttribute("fill", "#04dd00"); d.setAttribute("font-weight", "bold");
             d.textContent = "$";
             textLayer.appendChild(d);
