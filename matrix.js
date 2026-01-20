@@ -281,8 +281,8 @@ function initMatrixResult() {
 
     // Mobile Scaling factors
     const isMobile = window.innerWidth < 768;
-    const rScale = isMobile ? 1.2 : 1.0; // Slightly reduced to fit better
-    const tScale = isMobile ? 1.15 : 1.0;
+    const rScale = isMobile ? 2.3 : 1.0;
+    const tScale = isMobile ? 1.8 : 1.0;
 
     // Angles for indices 0-7. 0 is Left (PI).
     // 0: Left (PI), 1: TL (5/4 PI), 2: Top (3/2 PI), 3: TR (7/4 PI), 4: Right (0), 5: BR (1/4 PI), 6: Bottom (1/2 PI), 7: BL (3/4 PI)
@@ -299,9 +299,9 @@ function initMatrixResult() {
 
     const outerPoints = [];
     const uPoints = [];
-    // Spacing adjustment for mobile to avoid overlaps
-    const innerRadius = isMobile ? 205 : 230;
-    const innerRadius2 = isMobile ? 150 : 197;
+    // Spacing adjustment for mobile to make nodes touch proportionally
+    const innerRadius = isMobile ? 175 : 230;
+    const innerRadius2 = isMobile ? 100 : 197;
 
     // Generate Points
     for (let i = 0; i < 8; i++) {
@@ -390,7 +390,7 @@ function initMatrixResult() {
     // Center
     drawNode(cx, cy, 28, "#F4F866", "#000", centerValue, "#000", 18);
     // ZK
-    const zkDotY = cy + (isMobile ? 52 : 40);
+    const zkDotY = cy + (isMobile ? 85 : 40);
     const scaledZKR = 10 * rScale;
     const scaledZKFS = 10 * tScale;
 
@@ -436,8 +436,8 @@ function initMatrixResult() {
     for (let i = 0; i < 8; i++) {
         drawNode(uPoints[i].x, uPoints[i].y, 15, uColors[i], "#000", U[i], uTxtColors[i], 16);
         // Small markers near U5/U6
-        if (i === 4) drawSmall(uPoints[i].x - 22, uPoints[i].y, "Л", "#D88A4B", "#fff");
-        if (i === 6) drawSmall(uPoints[i].x, uPoints[i].y - 22, "М", "#D88A4B", "#fff");
+        if (i === 4) drawSmall(uPoints[i].x - (isMobile ? 45 : 22), uPoints[i].y, "Л", "#D88A4B", "#fff");
+        if (i === 6) drawSmall(uPoints[i].x, uPoints[i].y - (isMobile ? 45 : 22), "М", "#D88A4B", "#fff");
     }
 
     function drawSmall(x, y, txt, fill, txtCol) {
@@ -515,7 +515,7 @@ function initMatrixResult() {
             nx = -nx; ny = -ny;
         }
 
-        const offset = 18; // Shift lines outwards by 18px
+        const offset = isMobile ? 60 : 18; // Shift lines outwards by 18px (60px on mobile)
         const sx = p1.x + nx * offset, sy = p1.y + ny * offset;
         const ex = p2.x + nx * offset, ey = p2.y + ny * offset;
 
